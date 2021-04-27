@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Whoa\\Validation\\": "../src",
+            "Sample\\": "./"
+        }
+    },
+    "require": {
+        "whoa-php/common" : "dev-master",
+        "ext-intl" : "*"
+    }
+}
