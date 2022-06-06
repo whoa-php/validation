@@ -26,6 +26,7 @@ use Whoa\Validation\Validator\Comparisons;
 use Whoa\Validation\Validator\Converters;
 use Whoa\Validation\Validator\Generics;
 use Whoa\Validation\Validator\Types;
+
 use function assert;
 
 /**
@@ -66,6 +67,7 @@ class Rules
         stringToInt as public;
         stringToArray as public;
         stringArrayToIntArray as public;
+        stringArrayToStringArray as public;
     }
 
     use Generics {
@@ -91,7 +93,7 @@ class Rules
     }
 
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param ContextInterface $context
      *
      * @return bool
@@ -104,7 +106,7 @@ class Rules
     }
 
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param ContextInterface $context
      *
      * @return bool

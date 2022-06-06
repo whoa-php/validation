@@ -35,6 +35,7 @@ use Whoa\Validation\SingleValidator;
 use Whoa\Validation\Validator\ArrayValidation;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+
 use function assert;
 use function is_int;
 
@@ -52,20 +53,20 @@ class RulesTest extends TestCase
      */
     public function testDates(): void
     {
-        $jan1  = new DateTimeImmutable('2001-01-01');
-        $feb1  = new DateTimeImmutable('2001-02-01');
+        $jan1 = new DateTimeImmutable('2001-01-01');
+        $feb1 = new DateTimeImmutable('2001-02-01');
         $jan20 = new DateTimeImmutable('2001-01-20');
 
         $rules = [
-            'date1'  => v::stringToDateTime(DATE_ATOM, v::between($jan1, $feb1)),
-            'date2'  => v::stringToDateTime('Y-d-m\TH:i:sP', v::equals($jan20)),
-            'date3'  => v::stringToDateTime(DATE_ATOM, v::notEquals($jan20)),
-            'date4'  => v::nullable(v::stringToDateTime(DATE_ATOM, v::success())),
-            'date5'  => v::nullable(v::stringToDateTime(DATE_ATOM, v::success())),
-            'date6'  => v::stringToDateTime(DATE_ATOM, v::lessThan($feb1)),
-            'date7'  => v::stringToDateTime(DATE_ATOM, v::lessOrEquals($feb1)),
-            'date8'  => v::stringToDateTime(DATE_ATOM, v::moreThan($feb1)),
-            'date9'  => v::stringToDateTime(DATE_ATOM, v::moreOrEquals($feb1)),
+            'date1' => v::stringToDateTime(DATE_ATOM, v::between($jan1, $feb1)),
+            'date2' => v::stringToDateTime('Y-d-m\TH:i:sP', v::equals($jan20)),
+            'date3' => v::stringToDateTime(DATE_ATOM, v::notEquals($jan20)),
+            'date4' => v::nullable(v::stringToDateTime(DATE_ATOM, v::success())),
+            'date5' => v::nullable(v::stringToDateTime(DATE_ATOM, v::success())),
+            'date6' => v::stringToDateTime(DATE_ATOM, v::lessThan($feb1)),
+            'date7' => v::stringToDateTime(DATE_ATOM, v::lessOrEquals($feb1)),
+            'date8' => v::stringToDateTime(DATE_ATOM, v::moreThan($feb1)),
+            'date9' => v::stringToDateTime(DATE_ATOM, v::moreOrEquals($feb1)),
             'date10' => v::stringToDateTime('Y-m-d', v::success()),
             'date11' => v::stringToDateTime('Y-m-d', v::equals($jan20)),
         ];
@@ -73,15 +74,15 @@ class RulesTest extends TestCase
         // Check with valid input
 
         $input = [
-            'date1'  => '2001-01-02T00:00:00Z',
-            'date2'  => '2001-20-01T00:00:00Z',
-            'date3'  => '2001-01-21T00:00:00Z',
-            'date4'  => null,
-            'date5'  => '2001-02-03T00:00:00Z',
-            'date6'  => '2001-01-02T00:00:00Z',
-            'date7'  => '2001-02-01T00:00:00Z',
-            'date8'  => '2001-02-02T00:00:00Z',
-            'date9'  => '2001-02-01T00:00:00Z',
+            'date1' => '2001-01-02T00:00:00Z',
+            'date2' => '2001-20-01T00:00:00Z',
+            'date3' => '2001-01-21T00:00:00Z',
+            'date4' => null,
+            'date5' => '2001-02-03T00:00:00Z',
+            'date6' => '2001-01-02T00:00:00Z',
+            'date7' => '2001-02-01T00:00:00Z',
+            'date8' => '2001-02-02T00:00:00Z',
+            'date9' => '2001-02-01T00:00:00Z',
             'date10' => '2001-01-20',
             'date11' => '2001-01-20',
         ];
@@ -90,15 +91,15 @@ class RulesTest extends TestCase
 
         $this->assertEmpty($errors);
         $this->assertEquals([
-            'date1'  => new DateTimeImmutable('2001-01-02T00:00:00Z'),
-            'date2'  => $jan20,
-            'date3'  => new DateTimeImmutable('2001-01-21T00:00:00Z'),
-            'date4'  => null,
-            'date5'  => new DateTimeImmutable('2001-02-03T00:00:00Z'),
-            'date6'  => new DateTimeImmutable('2001-01-02T00:00:00Z'),
-            'date7'  => new DateTimeImmutable('2001-02-01T00:00:00Z'),
-            'date8'  => new DateTimeImmutable('2001-02-02T00:00:00Z'),
-            'date9'  => new DateTimeImmutable('2001-02-01T00:00:00Z'),
+            'date1' => new DateTimeImmutable('2001-01-02T00:00:00Z'),
+            'date2' => $jan20,
+            'date3' => new DateTimeImmutable('2001-01-21T00:00:00Z'),
+            'date4' => null,
+            'date5' => new DateTimeImmutable('2001-02-03T00:00:00Z'),
+            'date6' => new DateTimeImmutable('2001-01-02T00:00:00Z'),
+            'date7' => new DateTimeImmutable('2001-02-01T00:00:00Z'),
+            'date8' => new DateTimeImmutable('2001-02-02T00:00:00Z'),
+            'date9' => new DateTimeImmutable('2001-02-01T00:00:00Z'),
             'date10' => $jan20,
             'date11' => new DateTimeImmutable('2001-01-20T00:00:00Z'),
         ], $captures);
@@ -106,15 +107,15 @@ class RulesTest extends TestCase
         // Check with invalid input
 
         $input = [
-            'date1'  => '2001-03-02T00:00:00Z',
-            'date2'  => '2001-21-01T00:00:00Z',
-            'date3'  => '2001-01-20T00:00:00Z',
-            'date4'  => new stdClass(),
-            'date5'  => 'not date',
-            'date6'  => '2001-02-01T00:00:00Z',
-            'date7'  => '2001-02-02T00:00:00Z',
-            'date8'  => '2001-02-01T00:00:00Z',
-            'date9'  => '2001-01-01T00:00:00Z',
+            'date1' => '2001-03-02T00:00:00Z',
+            'date2' => '2001-21-01T00:00:00Z',
+            'date3' => '2001-01-20T00:00:00Z',
+            'date4' => new stdClass(),
+            'date5' => 'not date',
+            'date6' => '2001-02-01T00:00:00Z',
+            'date7' => '2001-02-02T00:00:00Z',
+            'date8' => '2001-02-01T00:00:00Z',
+            'date9' => '2001-01-01T00:00:00Z',
             'date10' => '#DATE',
             'date11' => new stdClass(),
         ];
@@ -212,30 +213,30 @@ class RulesTest extends TestCase
         // Check with invalid input
 
         $rules = [
-            'time1'  => v::stringToDateTime('H:i:s', v::success()),
-            'time2'  => v::stringToDateTime('H:i:s', v::equals($time3)),
-            'time3'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time1))),
-            'time4'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time2))),
-            'time5'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
-            'time6'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
-            'time7'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
-            'time8'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
-            'time9'  => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
+            'time1' => v::stringToDateTime('H:i:s', v::success()),
+            'time2' => v::stringToDateTime('H:i:s', v::equals($time3)),
+            'time3' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time1))),
+            'time4' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time2))),
+            'time5' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
+            'time6' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
+            'time7' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
+            'time8' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
+            'time9' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
             'time10' => v::stringToDateTime('H:i:s', v::isDateTime(v::equals($time3))),
             'time11' => v::stringToDateTime('H:i:s', v::isDateTime(v::lessThan($time1))),
             'time12' => v::stringToDateTime('H:i:s', v::isDateTime(v::moreThan($time1))),
         ];
 
         $input = [
-            'time1'  => '2001-03-02T00:00:00Z',
-            'time2'  => new stdClass(),
-            'time3'  => 'not date',
-            'time4'  => '22:10:999',
-            'time5'  => '24:10:01',
-            'time6'  => '999:10.01',
-            'time7'  => '00:99:01',
-            'time8'  => '00:990:01',
-            'time9'  => '#DATE',
+            'time1' => '2001-03-02T00:00:00Z',
+            'time2' => new stdClass(),
+            'time3' => 'not date',
+            'time4' => '22:10:999',
+            'time5' => '24:10:01',
+            'time6' => '999:10.01',
+            'time7' => '00:99:01',
+            'time8' => '00:990:01',
+            'time9' => '#DATE',
             'time10' => '22:10:02',
             'time11' => '22:11:02',
             'time12' => '22:09:02',
@@ -304,15 +305,15 @@ class RulesTest extends TestCase
     public function testScalars(): void
     {
         $rules = [
-            'scalar1'  => v::stringToInt(v::between(5, 10)),
-            'scalar2'  => v::stringToFloat(v::equals(5.5)),
-            'scalar3'  => v::stringToBool(v::notEquals(false)),
-            'scalar4'  => v::nullable(v::stringToInt(v::success())),
-            'scalar5'  => v::nullable(v::stringToFloat(v::success())),
-            'scalar6'  => v::stringToInt(v::lessThan(5)),
-            'scalar7'  => v::stringToInt(v::lessOrEquals(5)),
-            'scalar8'  => v::stringToInt(v::moreThan(5)),
-            'scalar9'  => v::stringToInt(v::moreOrEquals(5)),
+            'scalar1' => v::stringToInt(v::between(5, 10)),
+            'scalar2' => v::stringToFloat(v::equals(5.5)),
+            'scalar3' => v::stringToBool(v::notEquals(false)),
+            'scalar4' => v::nullable(v::stringToInt(v::success())),
+            'scalar5' => v::nullable(v::stringToFloat(v::success())),
+            'scalar6' => v::stringToInt(v::lessThan(5)),
+            'scalar7' => v::stringToInt(v::lessOrEquals(5)),
+            'scalar8' => v::stringToInt(v::moreThan(5)),
+            'scalar9' => v::stringToInt(v::moreOrEquals(5)),
             'scalar10' => v::isString(v::inValues(['one', 'two', 'three'])),
             'scalar11' => v::notEquals(null),
         ];
@@ -320,15 +321,15 @@ class RulesTest extends TestCase
         // Check with valid input
 
         $input = [
-            'scalar1'  => '7',
-            'scalar2'  => '5.5',
-            'scalar3'  => 'true',
-            'scalar4'  => null,
-            'scalar5'  => '5.5',
-            'scalar6'  => '4',
-            'scalar7'  => '5',
-            'scalar8'  => '6',
-            'scalar9'  => '5',
+            'scalar1' => '7',
+            'scalar2' => '5.5',
+            'scalar3' => 'true',
+            'scalar4' => null,
+            'scalar5' => '5.5',
+            'scalar6' => '4',
+            'scalar7' => '5',
+            'scalar8' => '6',
+            'scalar9' => '5',
             'scalar10' => 'two',
             'scalar11' => 'anything',
         ];
@@ -337,15 +338,15 @@ class RulesTest extends TestCase
 
         $this->assertEmpty($errors);
         $this->assertEquals([
-            'scalar1'  => 7,
-            'scalar2'  => 5.5,
-            'scalar3'  => true,
-            'scalar4'  => null,
-            'scalar5'  => 5.5,
-            'scalar6'  => 4,
-            'scalar7'  => 5,
-            'scalar8'  => 6,
-            'scalar9'  => 5,
+            'scalar1' => 7,
+            'scalar2' => 5.5,
+            'scalar3' => true,
+            'scalar4' => null,
+            'scalar5' => 5.5,
+            'scalar6' => 4,
+            'scalar7' => 5,
+            'scalar8' => 6,
+            'scalar9' => 5,
             'scalar10' => 'two',
             'scalar11' => 'anything',
         ], $captures);
@@ -353,15 +354,15 @@ class RulesTest extends TestCase
         // Check with invalid input
 
         $input = [
-            'scalar1'  => '3',
-            'scalar2'  => '6.5',
-            'scalar3'  => 'false',
-            'scalar4'  => new stdClass(),
-            'scalar5'  => new stdClass(),
-            'scalar6'  => '5',
-            'scalar7'  => '6',
-            'scalar8'  => '5',
-            'scalar9'  => '4',
+            'scalar1' => '3',
+            'scalar2' => '6.5',
+            'scalar3' => 'false',
+            'scalar4' => new stdClass(),
+            'scalar5' => new stdClass(),
+            'scalar6' => '5',
+            'scalar7' => '6',
+            'scalar8' => '5',
+            'scalar9' => '4',
             'scalar10' => 'four',
             'scalar11' => null,
         ];
@@ -515,61 +516,69 @@ class RulesTest extends TestCase
     public function testConverters(): void
     {
         $rules = [
-            'string1'    => v::stringToBool(),
-            'string2'    => v::stringToBool(),
-            'string3'    => v::stringToDateTime(DATE_ATOM),
-            'string4'    => v::stringToFloat(),
-            'string5'    => v::stringToInt(),
-            'stringCsv'  => v::stringToArray(','),
+            'string1' => v::stringToBool(),
+            'string2' => v::stringToBool(),
+            'string3' => v::stringToDateTime(DATE_ATOM),
+            'string4' => v::stringToFloat(),
+            'string5' => v::stringToInt(),
+            'stringCsv' => v::stringToArray(','),
             'stringArr1' => v::stringArrayToIntArray(),
             'stringArr2' => v::stringArrayToIntArray(),
+            'stringArr3' => v::stringArrayToStringArray(),
+            'stringArr4' => v::stringArrayToStringArray(),
         ];
 
         // Check with valid input
 
-        $now   = new DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $input = [
-            'string1'    => 'yes',
-            'string2'    => true,
-            'string3'    => $now,
-            'string4'    => 5.5,
-            'string5'    => 5,
-            'stringCsv'  => '1, 2',
+            'string1' => 'yes',
+            'string2' => true,
+            'string3' => $now,
+            'string4' => 5.5,
+            'string5' => 5,
+            'stringCsv' => '1, 2',
             'stringArr1' => ['1', '2',],
             'stringArr2' => ['3tree',],
+            'stringArr3' => ['_1234abc',],
+            'stringArr4' => ['123abc_', 'apple_134'],
         ];
 
         [$captures, $errors] = $this->validateArray($input, $rules);
 
         $this->assertEmpty($errors);
         $this->assertEquals([
-            'string1'    => true,
-            'string2'    => true,
-            'string3'    => $now,
-            'string4'    => 5.5,
-            'string5'    => 5,
-            'stringCsv'  => ['1', ' 2'],
+            'string1' => true,
+            'string2' => true,
+            'string3' => $now,
+            'string4' => 5.5,
+            'string5' => 5,
+            'stringCsv' => ['1', ' 2'],
             'stringArr1' => [1, 2],
             'stringArr2' => [3],
+            'stringArr3' => ['_1234abc'],
+            'stringArr4' => ['123abc_', 'apple_134'],
         ], $captures);
 
         // Check with invalid input
 
         $input = [
-            'string1'    => 'non bool',
-            'string2'    => new stdClass(),
-            'string3'    => 'not date or date in wrong format',
-            'string4'    => [],
-            'string5'    => [],
-            'stringCsv'  => 123,
+            'string1' => 'non bool',
+            'string2' => new stdClass(),
+            'string3' => 'not date or date in wrong format',
+            'string4' => [],
+            'string5' => [],
+            'stringCsv' => 123,
             'stringArr1' => 123,
             'stringArr2' => [new stdClass(),],
+            'stringArr3' => 234,
+            'stringArr4' => [new stdClass(),],
         ];
 
         [$captures, $errors] = $this->validateArray($input, $rules);
 
         $this->assertEmpty($captures);
-        $this->assertCount(8, $errors);
+        $this->assertCount(10, $errors);
 
         $this->assertEquals(
             ErrorCodes::IS_BOOL,
@@ -602,6 +611,14 @@ class RulesTest extends TestCase
         $this->assertEquals(
             ErrorCodes::IS_STRING,
             $this->findErrorByParamName('stringArr2', $errors)->getMessageCode()
+        );
+        $this->assertEquals(
+            ErrorCodes::IS_ARRAY,
+            $this->findErrorByParamName('stringArr3', $errors)->getMessageCode()
+        );
+        $this->assertEquals(
+            ErrorCodes::IS_STRING,
+            $this->findErrorByParamName('stringArr4', $errors)->getMessageCode()
         );
     }
 
@@ -751,26 +768,26 @@ class RulesTest extends TestCase
     public function testTypes(): void
     {
         $rules = [
-            'array'   => v::isArray(v::success()),
-            'bool'    => v::isBool(v::success()),
-            'date'    => v::isDateTime(v::success()),
-            'float'   => v::isFloat(v::success()),
-            'int'     => v::isInt(v::success()),
+            'array' => v::isArray(v::success()),
+            'bool' => v::isBool(v::success()),
+            'date' => v::isDateTime(v::success()),
+            'float' => v::isFloat(v::success()),
+            'int' => v::isInt(v::success()),
             'numeric' => v::isNumeric(v::success()),
-            'string'  => v::isString(v::success()),
+            'string' => v::isString(v::success()),
         ];
 
         // Check with valid input
 
-        $now   = new DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $input = [
-            'array'   => [],
-            'bool'    => true,
-            'date'    => $now,
-            'float'   => 5.5,
-            'int'     => 5,
+            'array' => [],
+            'bool' => true,
+            'date' => $now,
+            'float' => 5.5,
+            'int' => 5,
             'numeric' => 5.5,
-            'string'  => 'some string',
+            'string' => 'some string',
         ];
 
         [$captures, $errors] = $this->validateArray($input, $rules);
@@ -781,13 +798,13 @@ class RulesTest extends TestCase
         // Check with invalid input
 
         $input = [
-            'array'   => new stdClass(),
-            'bool'    => new stdClass(),
-            'date'    => new stdClass(),
-            'float'   => new stdClass(),
-            'int'     => new stdClass(),
+            'array' => new stdClass(),
+            'bool' => new stdClass(),
+            'date' => new stdClass(),
+            'float' => new stdClass(),
+            'int' => new stdClass(),
             'numeric' => 'ABC',
-            'string'  => new stdClass(),
+            'string' => new stdClass(),
         ];
 
         [$captures, $errors] = $this->validateArray($input, $rules);
@@ -909,10 +926,12 @@ class RulesTest extends TestCase
      */
     public function testEmulateValidationChecksDatabaseRecord(): void
     {
-        $dbExistRule = v::isString(v::stringToInt(
-            v::ifX([static::class, 'emulateDbRequest'], v::success(), v::fail())
-        ));
-        $validator   = SingleValidator::validator($dbExistRule);
+        $dbExistRule = v::isString(
+            v::stringToInt(
+                v::ifX([static::class, 'emulateDbRequest'], v::success(), v::fail())
+            )
+        );
+        $validator = SingleValidator::validator($dbExistRule);
 
         // no error
         $this->assertTrue($validator->validate('5'));
@@ -922,7 +941,7 @@ class RulesTest extends TestCase
     }
 
     /**
-     * @param mixed            $input
+     * @param mixed $input
      * @param ContextInterface $context
      *
      * @return bool
@@ -947,7 +966,7 @@ class RulesTest extends TestCase
      */
     private function validateArray(array $input, array $rules): array
     {
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
         $captures = new CaptureAggregator();
 
         // both aggregators are Countable. Just add some testing/coverage for that.
@@ -975,7 +994,7 @@ class RulesTest extends TestCase
     }
 
     /**
-     * @param string           $name
+     * @param string $name
      * @param ErrorInterface[] $errors
      *
      * @return ErrorInterface

@@ -23,6 +23,7 @@ namespace Whoa\Validation\Validator;
 
 use Whoa\Validation\Contracts\Rules\RuleInterface;
 use Whoa\Validation\Rules\Converters\StringArrayToIntArray;
+use Whoa\Validation\Rules\Converters\StringArrayToStringArray;
 use Whoa\Validation\Rules\Converters\StringToArray;
 use Whoa\Validation\Rules\Converters\StringToBool;
 use Whoa\Validation\Rules\Converters\StringToDateTime;
@@ -46,7 +47,7 @@ trait Converters
     }
 
     /**
-     * @param string             $format
+     * @param string $format
      * @param RuleInterface|null $next
      *
      * @return RuleInterface
@@ -87,8 +88,18 @@ trait Converters
     }
 
     /**
-     * @param string             $delimiter
-     * @param int                $limit
+     * @param RuleInterface|null $next
+     *
+     * @return RuleInterface
+     */
+    protected static function stringArrayToStringArray(RuleInterface $next = null): RuleInterface
+    {
+        return $next === null ? new StringArrayToStringArray() : new AndOperator(new StringArrayToStringArray(), $next);
+    }
+
+    /**
+     * @param string $delimiter
+     * @param int $limit
      * @param RuleInterface|null $next
      *
      * @return RuleInterface
@@ -97,8 +108,7 @@ trait Converters
         string $delimiter,
         int $limit = PHP_INT_MAX,
         RuleInterface $next = null
-    ): RuleInterface
-    {
+    ): RuleInterface {
         return $next === null ?
             new StringToArray($delimiter, $limit) : new AndOperator(new StringToArray($delimiter, $limit), $next);
     }
