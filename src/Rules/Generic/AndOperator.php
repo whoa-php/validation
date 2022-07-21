@@ -34,12 +34,12 @@ final class AndOperator extends BaseRule
     /**
      * @var RuleInterface
      */
-    private $primary;
+    private RuleInterface $primary;
 
     /**
      * @var RuleInterface
      */
-    private $secondary;
+    private RuleInterface $secondary;
 
     /**
      * @param RuleInterface $primary
@@ -47,7 +47,7 @@ final class AndOperator extends BaseRule
      */
     public function __construct(RuleInterface $primary, RuleInterface $secondary)
     {
-        $this->primary   = $primary;
+        $this->primary = $primary;
         $this->secondary = $secondary;
     }
 

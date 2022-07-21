@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function assert;
 use function in_array;
 
@@ -44,7 +45,7 @@ final class Enum extends ExecuteRule
         assert(!empty($values));
 
         parent::__construct([
-            static::PROPERTY_VALUES => $values,
+            Enum::PROPERTY_VALUES => $values,
         ]);
     }
 
@@ -53,11 +54,11 @@ final class Enum extends ExecuteRule
      */
     public static function execute($value, ContextInterface $context, $extras = null): array
     {
-        $values = $context->getProperties()->getProperty(static::PROPERTY_VALUES);
-        $isOk   = in_array($value, $values);
+        $values = $context->getProperties()->getProperty(Enum::PROPERTY_VALUES);
+        $isOk = in_array($value, $values);
 
         return $isOk === true ?
-            static::createSuccessReply($value) :
-            static::createErrorReply($context, $value, ErrorCodes::INVALID_VALUE, Messages::INVALID_VALUE, []);
+            Enum::createSuccessReply($value) :
+            Enum::createErrorReply($context, $value, ErrorCodes::INVALID_VALUE, Messages::INVALID_VALUE, []);
     }
 }

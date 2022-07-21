@@ -23,6 +23,7 @@ namespace Sample\Validation;
 
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function is_int;
 
 /**
@@ -31,7 +32,7 @@ use function is_int;
 class IsSkuRule extends ExecuteRule
 {
     /** @var string Message Template */
-    const MESSAGE_TEMPLATE = 'The value should be a valid SKU.';
+    public const MESSAGE_TEMPLATE = 'The value should be a valid SKU.';
 
     /**
      * @inheritDoc

@@ -29,9 +29,8 @@ use Whoa\Validation\Contracts\Execution\ContextInterface;
 interface ComparisionInterface
 {
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function compare($value, ContextInterface $context): bool;

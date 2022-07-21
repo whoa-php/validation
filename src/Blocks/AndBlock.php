@@ -32,32 +32,31 @@ final class AndBlock implements AndExpressionInterface
     /**
      * @var ExecutionBlockInterface
      */
-    private $primary;
+    private ExecutionBlockInterface $primary;
 
     /**
      * @var ExecutionBlockInterface
      */
-    private $secondary;
+    private ExecutionBlockInterface $secondary;
 
     /**
      * @var array
      */
-    private $properties;
+    private array $properties;
 
 
     /**
      * @param ExecutionBlockInterface $primary
      * @param ExecutionBlockInterface $secondary
-     * @param array                   $properties
+     * @param array $properties
      */
     public function __construct(
         ExecutionBlockInterface $primary,
         ExecutionBlockInterface $secondary,
         array $properties = []
-    )
-    {
-        $this->primary    = $primary;
-        $this->secondary  = $secondary;
+    ) {
+        $this->primary = $primary;
+        $this->secondary = $secondary;
         $this->properties = $properties;
     }
 

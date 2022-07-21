@@ -31,7 +31,7 @@ class Error implements ErrorInterface
     /**
      * @var string|null
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @var mixed
@@ -41,34 +41,34 @@ class Error implements ErrorInterface
     /**
      * @var int
      */
-    private $code;
+    private int $code;
 
     /**
      * @var string
      */
-    private $messageTemplate;
+    private string $messageTemplate;
 
     /**
      * @var array|null
      */
-    private $messageParams;
+    private ?array $messageParams;
 
     /**
      * @param null|string $name
-     * @param mixed       $value
-     * @param int         $code
-     * @param string      $messageTemplate
-     * @param array       $messageParams
+     * @param mixed $value
+     * @param int $code
+     * @param string $messageTemplate
+     * @param array $messageParams
      */
     public function __construct(?string $name, $value, int $code, string $messageTemplate, array $messageParams)
     {
         assert($this->checkEachValueConvertibleToString($messageParams));
 
-        $this->name            = $name;
-        $this->value           = $value;
-        $this->code            = $code;
+        $this->name = $name;
+        $this->value = $value;
+        $this->code = $code;
         $this->messageTemplate = $messageTemplate;
-        $this->messageParams   = $messageParams;
+        $this->messageParams = $messageParams;
     }
 
     /**
@@ -113,7 +113,6 @@ class Error implements ErrorInterface
 
     /**
      * @param iterable $messageParams
-     *
      * @return bool
      */
     protected function checkEachValueConvertibleToString(iterable $messageParams): bool

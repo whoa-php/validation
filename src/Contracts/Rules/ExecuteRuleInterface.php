@@ -29,11 +29,9 @@ use Whoa\Validation\Contracts\Execution\ContextInterface;
 interface ExecuteRuleInterface extends RuleInterface
 {
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param ContextInterface $context
-     *
-     * @param null             $extras
-     *
+     * @param null $extras
      * @return array
      */
     public static function execute($value, ContextInterface $context, $extras = null): array;

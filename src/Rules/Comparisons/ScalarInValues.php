@@ -24,6 +24,7 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function call_user_func;
 use function in_array;
@@ -39,13 +40,15 @@ final class ScalarInValues extends BaseOneValueComparision
      */
     public function __construct(array $scalars)
     {
-        assert(call_user_func(function () use ($scalars) {
-            foreach ($scalars as $scalar) {
-                assert(static::isValidType($scalar) === true);
-            }
+        assert(
+            call_user_func(function () use ($scalars) {
+                foreach ($scalars as $scalar) {
+                    assert(ScalarInValues::isValidType($scalar) === true);
+                }
 
-            return true;
-        }));
+                return true;
+            })
+        );
 
         parent::__construct(
             $scalars,
@@ -60,15 +63,12 @@ final class ScalarInValues extends BaseOneValueComparision
      */
     public static function compare($value, ContextInterface $context): bool
     {
-        assert(static::isValidType($value) === true);
-        $result = is_scalar($value) === true && in_array($value, static::readValue($context));
-
-        return $result;
+        assert(ScalarInValues::isValidType($value) === true);
+        return is_scalar($value) === true && in_array($value, ScalarInValues::readValue($context));
     }
 
     /**
      * @param mixed $value
-     *
      * @return bool
      */
     private static function isValidType($value): bool

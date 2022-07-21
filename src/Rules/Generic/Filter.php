@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function filter_var;
 
 /**
@@ -47,9 +48,9 @@ final class Filter extends ExecuteRule
     /**
      * For filter ID and options see @link http://php.net/manual/en/filter.filters.php
      *
-     * @param int    $filterId
-     * @param mixed  $options
-     * @param int    $errorCode
+     * @param int $filterId
+     * @param mixed $options
+     * @param int $errorCode
      * @param string $messageTemplate
      */
     public function __construct(
@@ -57,13 +58,12 @@ final class Filter extends ExecuteRule
         $options = null,
         int $errorCode = ErrorCodes::INVALID_VALUE,
         string $messageTemplate = Messages::INVALID_VALUE
-    )
-    {
+    ) {
         parent::__construct([
-            static::PROPERTY_FILTER_ID         => $filterId,
-            static::PROPERTY_FILTER_OPTIONS    => $options,
-            static::PROPERTY_FILTER_ERROR_CODE => $errorCode,
-            static::PROPERTY_MESSAGE_TEMPLATE  => $messageTemplate,
+            Filter::PROPERTY_FILTER_ID => $filterId,
+            Filter::PROPERTY_FILTER_OPTIONS => $options,
+            Filter::PROPERTY_FILTER_ERROR_CODE => $errorCode,
+            Filter::PROPERTY_MESSAGE_TEMPLATE => $messageTemplate,
         ]);
     }
 
@@ -72,16 +72,16 @@ final class Filter extends ExecuteRule
      */
     public static function execute($value, ContextInterface $context, $extras = null): array
     {
-        $properties      = $context->getProperties();
-        $filterId        = $properties->getProperty(static::PROPERTY_FILTER_ID);
-        $filterOptions   = $properties->getProperty(static::PROPERTY_FILTER_OPTIONS);
-        $errorCode       = $properties->getProperty(static::PROPERTY_FILTER_ERROR_CODE);
-        $messageTemplate = $properties->getProperty(static::PROPERTY_MESSAGE_TEMPLATE);
+        $properties = $context->getProperties();
+        $filterId = $properties->getProperty(Filter::PROPERTY_FILTER_ID);
+        $filterOptions = $properties->getProperty(Filter::PROPERTY_FILTER_OPTIONS);
+        $errorCode = $properties->getProperty(Filter::PROPERTY_FILTER_ERROR_CODE);
+        $messageTemplate = $properties->getProperty(Filter::PROPERTY_MESSAGE_TEMPLATE);
 
         $output = filter_var($value, $filterId, $filterOptions);
 
         return $output !== false ?
-            static::createSuccessReply($output) :
-            static::createErrorReply($context, $value, $errorCode, $messageTemplate, [$filterId, $filterOptions]);
+            Filter::createSuccessReply($output) :
+            Filter::createErrorReply($context, $value, $errorCode, $messageTemplate, [$filterId, $filterOptions]);
     }
 }

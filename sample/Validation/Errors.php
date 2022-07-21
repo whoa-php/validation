@@ -29,11 +29,11 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 interface Errors extends ErrorCodes
 {
     /** Custom error code */
-    const IS_EMAIL = self::LAST + 1;
+    public const IS_EMAIL = self::LAST + 1;
 
     /** Custom error code */
-    const IS_VALID_SKU = self::IS_EMAIL + 1;
+    public const IS_VALID_SKU = self::IS_EMAIL + 1;
 
     /** Custom error code */
-    const IS_DELIVERY_DATE = self::IS_VALID_SKU + 1;
+    public const IS_DELIVERY_DATE = self::IS_VALID_SKU + 1;
 }

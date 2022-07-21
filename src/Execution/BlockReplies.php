@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace Whoa\Validation\Execution;
 
 use Whoa\Validation\Contracts\Execution\ContextInterface;
+
 use function assert;
 use function count;
 use function is_array;
@@ -68,14 +69,13 @@ final class BlockReplies
 
     /**
      * @param mixed $result
-     *
      * @return array
      */
     public static function createSuccessReply($result): array
     {
         return [
-            static::REPLY_SUCCESS_VALUE => $result,
-            static::REPLY_ERRORS_INFO   => null,
+            BlockReplies::REPLY_SUCCESS_VALUE => $result,
+            BlockReplies::REPLY_ERRORS_INFO => null,
         ];
     }
 
@@ -97,11 +97,10 @@ final class BlockReplies
 
     /**
      * @param ContextInterface $context
-     * @param mixed            $errorValue
-     * @param int              $errorCode
-     * @param string           $messageTemplate
-     * @param array            $messageParams
-     *
+     * @param mixed $errorValue
+     * @param int $errorCode
+     * @param string $messageTemplate
+     * @param array $messageParams
      * @return array
      */
     public static function createErrorReply(
@@ -110,12 +109,11 @@ final class BlockReplies
         int $errorCode,
         string $messageTemplate,
         array $messageParams
-    ): array
-    {
+    ): array {
         return [
-            static::REPLY_SUCCESS_VALUE => null,
-            static::REPLY_ERRORS_INFO   => [
-                static::createErrorInfoEntry(
+            BlockReplies::REPLY_SUCCESS_VALUE => null,
+            BlockReplies::REPLY_ERRORS_INFO => [
+                BlockReplies::createErrorInfoEntry(
                     $context->getCurrentBlockId(),
                     $errorValue,
                     $errorCode,
@@ -128,10 +126,9 @@ final class BlockReplies
 
     /**
      * @param ContextInterface $context
-     * @param int              $errorCode
-     * @param string           $messageTemplate
-     * @param array            $messageParams
-     *
+     * @param int $errorCode
+     * @param string $messageTemplate
+     * @param array $messageParams
      * @return array
      */
     public static function createStartErrorReply(
@@ -139,12 +136,11 @@ final class BlockReplies
         int $errorCode,
         string $messageTemplate,
         array $messageParams
-    ): array
-    {
+    ): array {
         $value = null;
 
         return [
-            static::createErrorInfoEntry(
+            BlockReplies::createErrorInfoEntry(
                 $context->getCurrentBlockId(),
                 $value,
                 $errorCode,
@@ -156,10 +152,9 @@ final class BlockReplies
 
     /**
      * @param ContextInterface $context
-     * @param int              $errorCode
-     * @param string           $messageTemplate
-     * @param array            $messageParams
-     *
+     * @param int $errorCode
+     * @param string $messageTemplate
+     * @param array $messageParams
      * @return array
      */
     public static function createEndErrorReply(
@@ -167,12 +162,11 @@ final class BlockReplies
         int $errorCode,
         string $messageTemplate,
         array $messageParams
-    ): array
-    {
+    ): array {
         $value = null;
 
         return [
-            static::createErrorInfoEntry(
+            BlockReplies::createErrorInfoEntry(
                 $context->getCurrentBlockId(),
                 $value,
                 $errorCode,
@@ -183,12 +177,11 @@ final class BlockReplies
     }
 
     /**
-     * @param int    $blockId
-     * @param mixed  $value
-     * @param int    $code
+     * @param int $blockId
+     * @param mixed $value
+     * @param int $code
      * @param string $messageTemplate
-     * @param array  $messageParams
-     *
+     * @param array $messageParams
      * @return array
      */
     protected static function createErrorInfoEntry(
@@ -197,66 +190,58 @@ final class BlockReplies
         int $code,
         string $messageTemplate,
         array $messageParams
-    ): array
-    {
+    ): array {
         return [
-            static::ERROR_INFO_BLOCK_INDEX        => $blockId,
-            static::ERROR_INFO_VALUE              => $value,
-            static::ERROR_INFO_CODE               => $code,
-            static::ERROR_INFO_MESSAGE_TEMPLATE   => $messageTemplate,
-            static::ERROR_INFO_MESSAGE_PARAMETERS => $messageParams,
+            BlockReplies::ERROR_INFO_BLOCK_INDEX => $blockId,
+            BlockReplies::ERROR_INFO_VALUE => $value,
+            BlockReplies::ERROR_INFO_CODE => $code,
+            BlockReplies::ERROR_INFO_MESSAGE_TEMPLATE => $messageTemplate,
+            BlockReplies::ERROR_INFO_MESSAGE_PARAMETERS => $messageParams,
         ];
     }
 
     /**
      * @param array $result
-     *
      * @return bool
      */
     public static function isResultSuccessful(array $result): bool
     {
         assert(
             count($result) === 2 &&
-            ($result[static::REPLY_ERRORS_INFO] === null || is_array($result[static::REPLY_ERRORS_INFO]) === true)
+            ($result[BlockReplies::REPLY_ERRORS_INFO] === null || is_array(
+                    $result[BlockReplies::REPLY_ERRORS_INFO]
+                ) === true)
         );
 
         // if error code is `null`
-        $isOk = $result[static::REPLY_ERRORS_INFO] === null;
-
-        return $isOk;
+        return $result[BlockReplies::REPLY_ERRORS_INFO] === null;
     }
 
     /**
      * @param array $result
-     *
      * @return mixed
      */
     public static function extractResultOutput(array $result)
     {
         // extracting result only make sense when error is `null`.
-        assert(static::isResultSuccessful($result) === true && $result[static::REPLY_ERRORS_INFO] === null);
+        assert(BlockReplies::isResultSuccessful($result) === true && $result[BlockReplies::REPLY_ERRORS_INFO] === null);
 
-        $value = $result[static::REPLY_SUCCESS_VALUE];
-
-        return $value;
+        return $result[BlockReplies::REPLY_SUCCESS_VALUE];
     }
 
     /**
      * @param array $result
-     *
      * @return array
      */
     public static function extractResultErrorsInfo(array $result): array
     {
         assert(
             count($result) === 2 &&
-            $result[static::REPLY_SUCCESS_VALUE] === null &&
-            is_array($result[static::REPLY_ERRORS_INFO]) === true &&
-            empty($result[static::REPLY_ERRORS_INFO]) === false
+            $result[BlockReplies::REPLY_SUCCESS_VALUE] === null &&
+            is_array($result[BlockReplies::REPLY_ERRORS_INFO]) === true &&
+            empty($result[BlockReplies::REPLY_ERRORS_INFO]) === false
         );
 
-        $value = $result[static::REPLY_ERRORS_INFO];
-
-        return $value;
+        return $result[BlockReplies::REPLY_ERRORS_INFO];
     }
 }

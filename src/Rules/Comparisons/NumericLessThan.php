@@ -24,6 +24,7 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function is_numeric;
 
@@ -52,8 +53,6 @@ final class NumericLessThan extends BaseOneValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert(is_numeric($value) === true);
-        $result = is_numeric($value) === true && $value < static::readValue($context);
-
-        return $result;
+        return is_numeric($value) === true && $value < NumericLessThan::readValue($context);
     }
 }

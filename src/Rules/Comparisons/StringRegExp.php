@@ -24,6 +24,7 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function is_string;
 use function preg_match;
@@ -53,8 +54,6 @@ final class StringRegExp extends BaseOneValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert(is_string($value) === true);
-        $result = is_string($value) === true && preg_match(static::readValue($context), $value) === 1;
-
-        return $result;
+        return is_string($value) === true && preg_match(StringRegExp::readValue($context), $value) === 1;
     }
 }

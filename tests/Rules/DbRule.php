@@ -21,9 +21,12 @@ declare(strict_types=1);
 
 namespace Whoa\Tests\Validation\Rules;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\Rules\ExecuteRule;
 use PDO;
+
 use function assert;
 
 /**
@@ -33,6 +36,12 @@ class DbRule extends ExecuteRule
 {
     /**
      * @inheritDoc
+     * @param $value
+     * @param ContextInterface $context
+     * @param null $extras
+     * @return array
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
     public static function execute($value, ContextInterface $context, $extras = null): array
     {

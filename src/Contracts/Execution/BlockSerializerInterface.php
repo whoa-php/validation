@@ -33,138 +33,136 @@ interface BlockSerializerInterface
     /**
      * Serialization structure index.
      */
-    const SERIALIZATION_BLOCKS = 0;
+    public const SERIALIZATION_BLOCKS = 0;
 
     /**
      * Serialization structure index.
      */
-    const SERIALIZATION_BLOCKS_WITH_START = self::SERIALIZATION_BLOCKS + 1;
+    public const SERIALIZATION_BLOCKS_WITH_START = self::SERIALIZATION_BLOCKS + 1;
 
     /**
      * Serialization structure index.
      */
-    const SERIALIZATION_BLOCKS_WITH_END = self::SERIALIZATION_BLOCKS_WITH_START + 1;
+    public const SERIALIZATION_BLOCKS_WITH_END = self::SERIALIZATION_BLOCKS_WITH_START + 1;
 
     // Block types
 
     /**
      * Serialization property index.
      */
-    const TYPE = 0;
+    public const TYPE = 0;
 
     /**
      * Serialization property index.
      */
-    const PROPERTIES = self::TYPE + 1;
+    public const PROPERTIES = self::TYPE + 1;
 
     /**
      * Serialization property index.
      */
-    const TYPE__PROCEDURE = 0;
+    public const TYPE__PROCEDURE = 0;
 
     /**
      * Serialization property index.
      */
-    const TYPE__IF_EXPRESSION = self::TYPE__PROCEDURE + 1;
+    public const TYPE__IF_EXPRESSION = self::TYPE__PROCEDURE + 1;
 
     /**
      * Serialization property index.
      */
-    const TYPE__AND_EXPRESSION = self::TYPE__IF_EXPRESSION + 1;
+    public const TYPE__AND_EXPRESSION = self::TYPE__IF_EXPRESSION + 1;
 
     /**
      * Serialization property index.
      */
-    const TYPE__OR_EXPRESSION = self::TYPE__AND_EXPRESSION + 1;
+    public const TYPE__OR_EXPRESSION = self::TYPE__AND_EXPRESSION + 1;
 
     // Procedure keys
 
     /**
      * Serialization property index.
      */
-    const PROCEDURE_EXECUTE_CALLABLE = self::PROPERTIES + 1;
+    public const PROCEDURE_EXECUTE_CALLABLE = self::PROPERTIES + 1;
 
     /**
      * Serialization property index.
      */
-    const PROCEDURE_START_CALLABLE = self::PROCEDURE_EXECUTE_CALLABLE + 1;
+    public const PROCEDURE_START_CALLABLE = self::PROCEDURE_EXECUTE_CALLABLE + 1;
 
     /**
      * Serialization property index.
      */
-    const PROCEDURE_END_CALLABLE = self::PROCEDURE_START_CALLABLE + 1;
+    public const PROCEDURE_END_CALLABLE = self::PROCEDURE_START_CALLABLE + 1;
 
     /**
      * Serialization property index.
      */
-    const PROCEDURE_LAST = self::PROCEDURE_END_CALLABLE;
+    public const PROCEDURE_LAST = self::PROCEDURE_END_CALLABLE;
 
     // IF Expression keys
 
     /**
      * Serialization property index.
      */
-    const IF_EXPRESSION_CONDITION_CALLABLE = self::PROPERTIES + 1;
+    public const IF_EXPRESSION_CONDITION_CALLABLE = self::PROPERTIES + 1;
 
     /**
      * Serialization property index.
      */
-    const IF_EXPRESSION_ON_TRUE_BLOCK = self::IF_EXPRESSION_CONDITION_CALLABLE + 1;
+    public const IF_EXPRESSION_ON_TRUE_BLOCK = self::IF_EXPRESSION_CONDITION_CALLABLE + 1;
 
     /**
      * Serialization property index.
      */
-    const IF_EXPRESSION_ON_FALSE_BLOCK = self::IF_EXPRESSION_ON_TRUE_BLOCK + 1;
+    public const IF_EXPRESSION_ON_FALSE_BLOCK = self::IF_EXPRESSION_ON_TRUE_BLOCK + 1;
 
     /**
      * Serialization property index.
      */
-    const IF_EXPRESSION_LAST = self::IF_EXPRESSION_ON_FALSE_BLOCK;
+    public const IF_EXPRESSION_LAST = self::IF_EXPRESSION_ON_FALSE_BLOCK;
 
     // AND Expression keys
 
     /**
      * Serialization property index.
      */
-    const AND_EXPRESSION_PRIMARY = self::PROPERTIES + 1;
+    public const AND_EXPRESSION_PRIMARY = self::PROPERTIES + 1;
 
     /**
      * Serialization property index.
      */
-    const AND_EXPRESSION_SECONDARY = self::AND_EXPRESSION_PRIMARY + 1;
+    public const AND_EXPRESSION_SECONDARY = self::AND_EXPRESSION_PRIMARY + 1;
 
     /**
      * Serialization property index.
      */
-    const AND_EXPRESSION_LAST = self::AND_EXPRESSION_SECONDARY;
+    public const AND_EXPRESSION_LAST = self::AND_EXPRESSION_SECONDARY;
 
     // OR Expression keys
 
     /**
      * Serialization property index.
      */
-    const OR_EXPRESSION_PRIMARY = self::PROPERTIES + 1;
+    public const OR_EXPRESSION_PRIMARY = self::PROPERTIES + 1;
 
     /**
      * Serialization property index.
      */
-    const OR_EXPRESSION_SECONDARY = self::OR_EXPRESSION_PRIMARY + 1;
+    public const OR_EXPRESSION_SECONDARY = self::OR_EXPRESSION_PRIMARY + 1;
 
     /**
      * Serialization property index.
      */
-    const OR_EXPRESSION_LAST = self::OR_EXPRESSION_SECONDARY;
+    public const OR_EXPRESSION_LAST = self::OR_EXPRESSION_SECONDARY;
 
     /**
      * @param ExecutionBlockInterface $block
-     *
      * @return self
      */
     public function serialize(ExecutionBlockInterface $block): self;
 
     /**
      * @param ExecutionBlockInterface $block
-     *
      * @return int
      */
     public function addBlock(ExecutionBlockInterface $block): int;
@@ -221,7 +219,6 @@ interface BlockSerializerInterface
 
     /**
      * @param array $serialized
-     *
      * @return array
      */
     public static function unserializeBlocksWithEnd(array $serialized): array;

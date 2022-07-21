@@ -27,92 +27,92 @@ namespace Whoa\Validation\I18n;
 interface Messages
 {
     /** @var string Default message template */
-    const INVALID_VALUE = 'The value is invalid.';
+    public const INVALID_VALUE = 'The value is invalid.';
 
     /** @var string Default message template */
-    const REQUIRED = 'The value is required.';
+    public const REQUIRED = 'The value is required.';
 
     /** @var string Default message template */
-    const IS_STRING = 'The value should be a string.';
+    public const IS_STRING = 'The value should be a string.';
 
     /** @var string Default message template */
-    const IS_BOOL = 'The value should be a boolean.';
+    public const IS_BOOL = 'The value should be a boolean.';
 
     /** @var string Default message template */
-    const IS_INT = 'The value should be an integer.';
+    public const IS_INT = 'The value should be an integer.';
 
     /** @var string Default message template */
-    const IS_FLOAT = 'The value should be a float.';
+    public const IS_FLOAT = 'The value should be a float.';
 
     /** @var string Default message template */
-    const IS_NUMERIC = 'The value should be a numeric.';
+    public const IS_NUMERIC = 'The value should be a numeric.';
 
     /** @var string Default message template */
-    const IS_DATE_TIME = 'The value should be a valid date time.';
+    public const IS_DATE_TIME = 'The value should be a valid date time.';
 
     /** @var string Default message template */
-    const IS_ARRAY = 'The value should be an array.';
+    public const IS_ARRAY = 'The value should be an array.';
 
     /** @var string Default message template */
-    const DATE_TIME_BETWEEN = 'The date time value should be between {0} and {1}.';
+    public const DATE_TIME_BETWEEN = 'The date time value should be between {0} and {1}.';
 
     /** @var string Default message template */
-    const DATE_TIME_EQUALS = 'The date time value should be equal to {0}.';
+    public const DATE_TIME_EQUALS = 'The date time value should be equal to {0}.';
 
     /** @var string Default message template */
-    const DATE_TIME_LESS_OR_EQUALS = 'The date time value should be less or equal to {0}.';
+    public const DATE_TIME_LESS_OR_EQUALS = 'The date time value should be less or equal to {0}.';
 
     /** @var string Default message template */
-    const DATE_TIME_LESS_THAN = 'The date time value should be less than {0}.';
+    public const DATE_TIME_LESS_THAN = 'The date time value should be less than {0}.';
 
     /** @var string Default message template */
-    const DATE_TIME_MORE_OR_EQUALS = 'The date time value should be more or equal to {0}.';
+    public const DATE_TIME_MORE_OR_EQUALS = 'The date time value should be more or equal to {0}.';
 
     /** @var string Default message template */
-    const DATE_TIME_MORE_THAN = 'The date time value should be more than {0}.';
+    public const DATE_TIME_MORE_THAN = 'The date time value should be more than {0}.';
 
     /** @var string Default message template */
-    const DATE_TIME_NOT_EQUALS = 'The date time value should not be equal to {0}.';
+    public const DATE_TIME_NOT_EQUALS = 'The date time value should not be equal to {0}.';
 
     /** @var string Default message template */
-    const NUMERIC_BETWEEN = 'The value should be between {0} and {1}.';
+    public const NUMERIC_BETWEEN = 'The value should be between {0} and {1}.';
 
     /** @var string Default message template */
-    const NUMERIC_LESS_OR_EQUALS = 'The value should be be less or equal to {0}.';
+    public const NUMERIC_LESS_OR_EQUALS = 'The value should be be less or equal to {0}.';
 
     /** @var string Default message template */
-    const NUMERIC_LESS_THAN = 'The value should be be less than {0}.';
+    public const NUMERIC_LESS_THAN = 'The value should be be less than {0}.';
 
     /** @var string Default message template */
-    const NUMERIC_MORE_OR_EQUALS = 'The value should be be more or equal to {0}.';
+    public const NUMERIC_MORE_OR_EQUALS = 'The value should be be more or equal to {0}.';
 
     /** @var string Default message template */
-    const NUMERIC_MORE_THAN = 'The value should be be more than {0}.';
+    public const NUMERIC_MORE_THAN = 'The value should be be more than {0}.';
 
     /** @var string Default message template */
-    const SCALAR_EQUALS = 'The value should be equal to {0}.';
+    public const SCALAR_EQUALS = 'The value should be equal to {0}.';
 
     /** @var string Default message template */
-    const SCALAR_NOT_EQUALS = 'The value should not be equal to {0}.';
+    public const SCALAR_NOT_EQUALS = 'The value should not be equal to {0}.';
 
     /** @var string Default message template */
-    const SCALAR_IN_VALUES = 'The value is invalid.';
+    public const SCALAR_IN_VALUES = 'The value is invalid.';
 
     /** @var string Default message template */
-    const STRING_LENGTH_BETWEEN = 'The value should be between {0} and {1} characters.';
+    public const STRING_LENGTH_BETWEEN = 'The value should be between {0} and {1} characters.';
 
     /** @var string Default message template */
-    const STRING_LENGTH_MIN = 'The value should be at least {0} characters.';
+    public const STRING_LENGTH_MIN = 'The value should be at least {0} characters.';
 
     /** @var string Default message template */
-    const STRING_LENGTH_MAX = 'The value should not be greater than {0} characters.';
+    public const STRING_LENGTH_MAX = 'The value should not be greater than {0} characters.';
 
     /** @var string Default message template */
-    const STRING_REG_EXP = 'The value format is invalid.';
+    public const STRING_REG_EXP = 'The value format is invalid.';
 
     /** @var string Default message template */
-    const IS_NULL = 'The value should be NULL.';
+    public const IS_NULL = 'The value should be NULL.';
 
     /** @var string Default message template */
-    const IS_NOT_NULL = 'The value should not be NULL.';
+    public const IS_NOT_NULL = 'The value should not be NULL.';
 }

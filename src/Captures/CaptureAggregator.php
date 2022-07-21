@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace Whoa\Validation\Captures;
 
 use Whoa\Validation\Contracts\Captures\CaptureAggregatorInterface;
+
 use function count;
 
 /**
@@ -32,7 +33,7 @@ class CaptureAggregator implements CaptureAggregatorInterface
     /**
      * @var array
      */
-    private $remembered;
+    private array $remembered;
 
     /**
      * Constructor.

@@ -31,6 +31,7 @@ use Mockery;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+
 use function assert;
 use function is_int;
 
@@ -41,7 +42,6 @@ class ValidatorTest extends TestCase
 {
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testBasicValidatorMethods(): void
@@ -59,7 +59,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testBasicValidatorCaptureWithoutName(): void
@@ -73,13 +72,12 @@ class ValidatorTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testBasicValidatorRules(): void
     {
         // allows either int > 5 OR `true`
-        // it could be written shorter but we need some testing/coverage for the methods.
+        // it could be written shorter, but we need some testing/coverage for the methods.
         $rule = r::orX(
             r::ifX([static::class, 'customCondition'], r::success(), r::fail()),
             r::andX(r::isBool(r::success()), r::equals(true))
@@ -95,7 +93,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Test validation for array values.
-     *
      * @throws Exception
      */
     public function testArrayValidator(): void
@@ -110,7 +107,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Test caching for array validation.
-     *
      * @throws Exception
      */
     public function testArrayValidatorCache(): void
@@ -130,7 +126,6 @@ class ValidatorTest extends TestCase
 
     /**
      * Test container usage in validation rules.
-     *
      * @throws Exception
      */
     public function testContainerUsageInRules(): void
@@ -150,9 +145,8 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param mixed            $input
+     * @param mixed $input
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function customCondition($input, ContextInterface $context): bool

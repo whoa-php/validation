@@ -23,10 +23,12 @@ namespace Whoa\Validation\Execution;
 
 use Whoa\Validation\Contracts\Captures\CaptureAggregatorInterface;
 use Whoa\Validation\Contracts\Errors\ErrorAggregatorInterface;
+use Whoa\Validation\Contracts\Execution\BlockSerializerInterface;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\Contracts\Execution\ContextStorageInterface;
 use Whoa\Validation\Errors\Error;
 use Whoa\Validation\Rules\BaseRule;
+
 use function array_key_exists;
 use function assert;
 use function call_user_func;
@@ -38,21 +40,16 @@ use function is_iterable;
 
 /**
  * @package Whoa\Validation
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 final class BlockInterpreter
 {
     /**
-     * @param mixed                      $input
-     * @param array                      $serializedBlocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param array $serializedBlocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param ErrorAggregatorInterface   $errors
-     *
+     * @param ErrorAggregatorInterface $errors
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function execute(
         $input,
@@ -60,43 +57,48 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         ErrorAggregatorInterface $errors
-    ): bool
-    {
+    ): bool {
         $blockIndex = BlockSerializer::FIRST_BLOCK_INDEX;
 
-        $blocks   = static::getBlocks($serializedBlocks);
-        $startsOk = static::executeStarts(static::getBlocksWithStart($serializedBlocks), $blocks, $context, $errors);
-        $blockOk  = static::executeBlock($input, $blockIndex, $blocks, $context, $captures, $errors);
-        $endsOk   = static::executeEnds(static::getBlocksWithEnd($serializedBlocks), $blocks, $context, $errors);
+        $blocks = BlockInterpreter::getBlocks($serializedBlocks);
+        $startsOk = BlockInterpreter::executeStarts(
+            BlockInterpreter::getBlocksWithStart($serializedBlocks),
+            $blocks,
+            $context,
+            $errors
+        );
+        $blockOk = BlockInterpreter::executeBlock($input, $blockIndex, $blocks, $context, $captures, $errors);
+        $endsOk = BlockInterpreter::executeEnds(
+            BlockInterpreter::getBlocksWithEnd($serializedBlocks),
+            $blocks,
+            $context,
+            $errors
+        );
 
         return $startsOk && $blockOk && $endsOk;
     }
 
     /**
-     * @param iterable|int[]           $indexes
-     * @param array                    $blocks
-     * @param ContextStorageInterface  $context
+     * @param iterable|int[] $indexes
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param ErrorAggregatorInterface $errors
-     *
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function executeStarts(
         iterable $indexes,
         array $blocks,
         ContextStorageInterface $context,
         ErrorAggregatorInterface $errors
-    ): bool
-    {
+    ): bool {
         $allOk = true;
 
         foreach ($indexes as $index) {
             $context->setCurrentBlockId($index);
-            $block      = $blocks[$index];
-            $errorsInfo = static::executeProcedureStart($block, $context);
+            $block = $blocks[$index];
+            $errorsInfo = BlockInterpreter::executeProcedureStart($block, $context);
             if (empty($errorsInfo) === false) {
-                static::addBlockErrors($errorsInfo, $context, $errors);
+                BlockInterpreter::addBlockErrors($errorsInfo, $context, $errors);
                 $allOk = false;
             }
         }
@@ -105,30 +107,26 @@ final class BlockInterpreter
     }
 
     /**
-     * @param iterable|int[]           $indexes
-     * @param array                    $blocks
-     * @param ContextStorageInterface  $context
+     * @param iterable|int[] $indexes
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param ErrorAggregatorInterface $errors
-     *
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function executeEnds(
         iterable $indexes,
         array $blocks,
         ContextStorageInterface $context,
         ErrorAggregatorInterface $errors
-    ): bool
-    {
+    ): bool {
         $allOk = true;
 
         foreach ($indexes as $index) {
             $context->setCurrentBlockId($index);
-            $block      = $blocks[$index];
-            $errorsInfo = static::executeProcedureEnd($block, $context);
+            $block = $blocks[$index];
+            $errorsInfo = BlockInterpreter::executeProcedureEnd($block, $context);
             if (empty($errorsInfo) === false) {
-                static::addBlockErrors($errorsInfo, $context, $errors);
+                BlockInterpreter::addBlockErrors($errorsInfo, $context, $errors);
                 $allOk = false;
             }
         }
@@ -137,17 +135,14 @@ final class BlockInterpreter
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param ErrorAggregatorInterface   $errors
-     * @param null                       $extras
-     *
+     * @param ErrorAggregatorInterface $errors
+     * @param null $extras
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function executeBlock(
         $input,
@@ -157,9 +152,8 @@ final class BlockInterpreter
         CaptureAggregatorInterface $captures,
         ErrorAggregatorInterface $errors,
         $extras = null
-    ): bool
-    {
-        $result = static::executeBlockImpl(
+    ): bool {
+        $result = BlockInterpreter::executeBlockImpl(
             $input,
             $blockIndex,
             $blocks,
@@ -169,7 +163,7 @@ final class BlockInterpreter
         );
         if (BlockReplies::isResultSuccessful($result) === false) {
             $errorsInfo = BlockReplies::extractResultErrorsInfo($result);
-            static::addBlockErrors($errorsInfo, $context, $errors);
+            BlockInterpreter::addBlockErrors($errorsInfo, $context, $errors);
 
             return false;
         }
@@ -178,16 +172,13 @@ final class BlockInterpreter
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param null                       $extras
-     *
+     * @param null $extras
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeBlockImpl(
         $input,
@@ -196,26 +187,32 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         $extras = null
-    ): array
-    {
+    ): array {
         assert(array_key_exists($blockIndex, $blocks));
 
-        $blockType = static::getBlockType($blocks[$blockIndex]);
+        $blockType = BlockInterpreter::getBlockType($blocks[$blockIndex]);
         $context->setCurrentBlockId($blockIndex);
         switch ($blockType) {
-            case BlockSerializer::TYPE__PROCEDURE:
-                $result = static::executeProcedureBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
+            case BlockSerializerInterface::TYPE__PROCEDURE:
+                $result = BlockInterpreter::executeProcedureBlock(
+                    $input,
+                    $blockIndex,
+                    $blocks,
+                    $context,
+                    $captures,
+                    $extras
+                );
                 break;
-            case BlockSerializer::TYPE__IF_EXPRESSION:
-                $result = static::executeIfBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
+            case BlockSerializerInterface::TYPE__IF_EXPRESSION:
+                $result = BlockInterpreter::executeIfBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
                 break;
-            case BlockSerializer::TYPE__AND_EXPRESSION:
-                $result = static::executeAndBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
+            case BlockSerializerInterface::TYPE__AND_EXPRESSION:
+                $result = BlockInterpreter::executeAndBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
                 break;
-            case BlockSerializer::TYPE__OR_EXPRESSION:
+            case BlockSerializerInterface::TYPE__OR_EXPRESSION:
             default:
-                assert($blockType === BlockSerializer::TYPE__OR_EXPRESSION);
-                $result = static::executeOrBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
+                assert($blockType === BlockSerializerInterface::TYPE__OR_EXPRESSION);
+                $result = BlockInterpreter::executeOrBlock($input, $blockIndex, $blocks, $context, $captures, $extras);
                 break;
         }
 
@@ -223,16 +220,13 @@ final class BlockInterpreter
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param null                       $extras
-     *
+     * @param null $extras
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeProcedureBlock(
         $input,
@@ -241,31 +235,27 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         $extras = null
-    ): array
-    {
+    ): array {
         $block = $blocks[$blockIndex];
-        assert(static::getBlockType($block) === BlockSerializer::TYPE__PROCEDURE);
+        assert(BlockInterpreter::getBlockType($block) === BlockSerializerInterface::TYPE__PROCEDURE);
 
-        $procedure = $block[BlockSerializer::PROCEDURE_EXECUTE_CALLABLE];
+        $procedure = $block[BlockSerializerInterface::PROCEDURE_EXECUTE_CALLABLE];
         assert(is_callable($procedure));
         $result = call_user_func($procedure, $input, $context, $extras);
 
-        static::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
+        BlockInterpreter::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
 
         return $result;
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param null                       $extras
-     *
+     * @param null $extras
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeIfBlock(
         $input,
@@ -274,37 +264,33 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         $extras = null
-    ): array
-    {
+    ): array {
         $block = $blocks[$blockIndex];
-        assert(static::getBlockType($block) === BlockSerializer::TYPE__IF_EXPRESSION);
+        assert(BlockInterpreter::getBlockType($block) === BlockSerializerInterface::TYPE__IF_EXPRESSION);
 
-        $conditionCallable = $block[BlockSerializer::IF_EXPRESSION_CONDITION_CALLABLE];
+        $conditionCallable = $block[BlockSerializerInterface::IF_EXPRESSION_CONDITION_CALLABLE];
         assert(is_callable($conditionCallable));
         $conditionResult = call_user_func($conditionCallable, $input, $context, $extras);
         assert(is_bool($conditionResult));
 
         $index = $block[$conditionResult === true ?
-            BlockSerializer::IF_EXPRESSION_ON_TRUE_BLOCK : BlockSerializer::IF_EXPRESSION_ON_FALSE_BLOCK];
+            BlockSerializerInterface::IF_EXPRESSION_ON_TRUE_BLOCK : BlockSerializerInterface::IF_EXPRESSION_ON_FALSE_BLOCK];
 
-        $result = static::executeBlockImpl($input, $index, $blocks, $context, $captures, $extras);
+        $result = BlockInterpreter::executeBlockImpl($input, $index, $blocks, $context, $captures, $extras);
 
-        static::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
+        BlockInterpreter::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
 
         return $result;
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param null                       $extras
-     *
+     * @param null $extras
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeAndBlock(
         $input,
@@ -313,36 +299,38 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         $extras = null
-    ): array
-    {
+    ): array {
         $block = $blocks[$blockIndex];
-        assert(static::getBlockType($block) === BlockSerializer::TYPE__AND_EXPRESSION);
+        assert(BlockInterpreter::getBlockType($block) === BlockSerializerInterface::TYPE__AND_EXPRESSION);
 
-        $primaryIndex = $block[BlockSerializer::AND_EXPRESSION_PRIMARY];
-        $result       = static::executeBlockImpl($input, $primaryIndex, $blocks, $context, $captures, $extras);
+        $primaryIndex = $block[BlockSerializerInterface::AND_EXPRESSION_PRIMARY];
+        $result = BlockInterpreter::executeBlockImpl($input, $primaryIndex, $blocks, $context, $captures, $extras);
         if (BlockReplies::isResultSuccessful($result) === true) {
-            $nextInput      = BlockReplies::extractResultOutput($result);
-            $secondaryIndex = $block[BlockSerializer::AND_EXPRESSION_SECONDARY];
-            $result         = static::executeBlockImpl($nextInput, $secondaryIndex, $blocks, $context, $captures, $extras);
+            $nextInput = BlockReplies::extractResultOutput($result);
+            $secondaryIndex = $block[BlockSerializerInterface::AND_EXPRESSION_SECONDARY];
+            $result = BlockInterpreter::executeBlockImpl(
+                $nextInput,
+                $secondaryIndex,
+                $blocks,
+                $context,
+                $captures,
+                $extras
+            );
         }
 
-        static::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
+        BlockInterpreter::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
 
         return $result;
     }
 
     /**
-     * @param mixed                      $input
-     * @param int                        $blockIndex
-     * @param array                      $blocks
-     * @param ContextStorageInterface    $context
+     * @param mixed $input
+     * @param int $blockIndex
+     * @param array $blocks
+     * @param ContextStorageInterface $context
      * @param CaptureAggregatorInterface $captures
-     * @param null                       $extras
-     *
+     * @param null $extras
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private static function executeOrBlock(
         $input,
@@ -351,46 +339,53 @@ final class BlockInterpreter
         ContextStorageInterface $context,
         CaptureAggregatorInterface $captures,
         $extras = null
-    ): array
-    {
+    ): array {
         $block = $blocks[$blockIndex];
-        assert(static::getBlockType($block) === BlockSerializer::TYPE__OR_EXPRESSION);
+        assert(BlockInterpreter::getBlockType($block) === BlockSerializer::TYPE__OR_EXPRESSION);
 
-        $primaryIndex      = $block[BlockSerializer::OR_EXPRESSION_PRIMARY];
-        $resultFromPrimary = static::executeBlockImpl($input, $primaryIndex, $blocks, $context, $captures, $extras);
+        $primaryIndex = $block[BlockSerializerInterface::OR_EXPRESSION_PRIMARY];
+        $resultFromPrimary = BlockInterpreter::executeBlockImpl(
+            $input,
+            $primaryIndex,
+            $blocks,
+            $context,
+            $captures,
+            $extras
+        );
         if (BlockReplies::isResultSuccessful($resultFromPrimary) === true) {
             $result = $resultFromPrimary;
         } else {
-            $secondaryIndex = $block[BlockSerializer::OR_EXPRESSION_SECONDARY];
-            $result         = static::executeBlockImpl($input, $secondaryIndex, $blocks, $context, $captures, $extras);
+            $secondaryIndex = $block[BlockSerializerInterface::OR_EXPRESSION_SECONDARY];
+            $result = BlockInterpreter::executeBlockImpl(
+                $input,
+                $secondaryIndex,
+                $blocks,
+                $context,
+                $captures,
+                $extras
+            );
         }
 
-        static::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
+        BlockInterpreter::captureSuccessfulBlockResultIfEnabled($result, $block, $captures);
 
         return $result;
     }
 
     /**
      * @param array $serializedBlocks
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function getBlocks(array $serializedBlocks): array
     {
         $blocks = BlockSerializer::unserializeBlocks($serializedBlocks);
-        assert(static::debugCheckLooksLikeBlocksArray($blocks));
+        assert(BlockInterpreter::debugCheckLooksLikeBlocksArray($blocks));
 
         return $blocks;
     }
 
     /**
      * @param array $serializedBlocks
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function getBlocksWithStart(array $serializedBlocks): array
     {
@@ -398,8 +393,12 @@ final class BlockInterpreter
 
         // check result contain only block indexes and the blocks are procedures
         assert(
-            is_array($blocks = static::getBlocks($serializedBlocks)) &&
-            static::debugCheckBlocksExist($blocksWithStart, $blocks, BlockSerializer::TYPE__PROCEDURE)
+            is_array($blocks = BlockInterpreter::getBlocks($serializedBlocks)) &&
+            BlockInterpreter::debugCheckBlocksExist(
+                $blocksWithStart,
+                $blocks,
+                BlockSerializerInterface::TYPE__PROCEDURE
+            )
         );
 
         return $blocksWithStart;
@@ -407,10 +406,7 @@ final class BlockInterpreter
 
     /**
      * @param array $serializedBlocks
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function getBlocksWithEnd(array $serializedBlocks): array
     {
@@ -418,8 +414,8 @@ final class BlockInterpreter
 
         // check result contain only block indexes and the blocks are procedures
         assert(
-            is_array($blocks = static::getBlocks($serializedBlocks)) &&
-            static::debugCheckBlocksExist($blocksWithEnd, $blocks, BlockSerializer::TYPE__PROCEDURE)
+            is_array($blocks = BlockInterpreter::getBlocks($serializedBlocks)) &&
+            BlockInterpreter::debugCheckBlocksExist($blocksWithEnd, $blocks, BlockSerializerInterface::TYPE__PROCEDURE)
         );
 
         return $blocksWithEnd;
@@ -427,39 +423,30 @@ final class BlockInterpreter
 
     /**
      * @param array $block
-     *
      * @return int
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function getBlockType(array $block): int
     {
-        assert(static::debugHasKnownBlockType($block));
+        assert(BlockInterpreter::debugHasKnownBlockType($block));
 
-        $type = $block[BlockSerializer::TYPE];
-
-        return $type;
+        return $block[BlockSerializerInterface::TYPE];
     }
 
     /**
-     * @param array                      $result
-     * @param array                      $block
+     * @param array $result
+     * @param array $block
      * @param CaptureAggregatorInterface $captures
-     *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function captureSuccessfulBlockResultIfEnabled(
         array $result,
         array $block,
         CaptureAggregatorInterface $captures
-    ): void
-    {
+    ): void {
         if (BlockReplies::isResultSuccessful($result) === true) {
-            $isCaptureEnabled = $block[BlockSerializer::PROPERTIES][BaseRule::PROPERTY_IS_CAPTURE_ENABLED] ?? false;
+            $isCaptureEnabled = $block[BlockSerializerInterface::PROPERTIES][BaseRule::PROPERTY_IS_CAPTURE_ENABLED] ?? false;
             if ($isCaptureEnabled === true) {
-                $name  = $block[BlockSerializer::PROPERTIES][BaseRule::PROPERTY_NAME];
+                $name = $block[BlockSerializerInterface::PROPERTIES][BaseRule::PROPERTY_NAME];
                 $value = BlockReplies::extractResultOutput($result);
                 $captures->remember($name, $value);
             }
@@ -467,17 +454,14 @@ final class BlockInterpreter
     }
 
     /**
-     * @param array            $procedureBlock
+     * @param array $procedureBlock
      * @param ContextInterface $context
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeProcedureStart(array $procedureBlock, ContextInterface $context): array
     {
-        assert(static::getBlockType($procedureBlock) === BlockSerializer::TYPE__PROCEDURE);
-        $callable = $procedureBlock[BlockSerializer::PROCEDURE_START_CALLABLE];
+        assert(BlockInterpreter::getBlockType($procedureBlock) === BlockSerializerInterface::TYPE__PROCEDURE);
+        $callable = $procedureBlock[BlockSerializerInterface::PROCEDURE_START_CALLABLE];
         assert(is_callable($callable) === true);
         $errors = call_user_func($callable, $context);
         assert(is_array($errors));
@@ -486,17 +470,14 @@ final class BlockInterpreter
     }
 
     /**
-     * @param array            $procedureBlock
+     * @param array $procedureBlock
      * @param ContextInterface $context
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function executeProcedureEnd(array $procedureBlock, ContextInterface $context): iterable
     {
-        assert(static::getBlockType($procedureBlock) === BlockSerializer::TYPE__PROCEDURE);
-        $callable = $procedureBlock[BlockSerializer::PROCEDURE_END_CALLABLE];
+        assert(BlockInterpreter::getBlockType($procedureBlock) === BlockSerializerInterface::TYPE__PROCEDURE);
+        $callable = $procedureBlock[BlockSerializerInterface::PROCEDURE_END_CALLABLE];
         assert(is_callable($callable) === true);
         $errors = call_user_func($callable, $context);
         assert(is_iterable($errors));
@@ -505,24 +486,22 @@ final class BlockInterpreter
     }
 
     /**
-     * @param iterable                 $errorsInfo
-     * @param ContextStorageInterface  $context
+     * @param iterable $errorsInfo
+     * @param ContextStorageInterface $context
      * @param ErrorAggregatorInterface $errors
-     *
      * @return void
      */
     private static function addBlockErrors(
         iterable $errorsInfo,
         ContextStorageInterface $context,
         ErrorAggregatorInterface $errors
-    ): void
-    {
+    ): void {
         foreach ($errorsInfo as $errorInfo) {
-            $index           = $errorInfo[BlockReplies::ERROR_INFO_BLOCK_INDEX];
-            $value           = $errorInfo[BlockReplies::ERROR_INFO_VALUE];
-            $errorCode       = $errorInfo[BlockReplies::ERROR_INFO_CODE];
+            $index = $errorInfo[BlockReplies::ERROR_INFO_BLOCK_INDEX];
+            $value = $errorInfo[BlockReplies::ERROR_INFO_VALUE];
+            $errorCode = $errorInfo[BlockReplies::ERROR_INFO_CODE];
             $messageTemplate = $errorInfo[BlockReplies::ERROR_INFO_MESSAGE_TEMPLATE];
-            $messageParams   = $errorInfo[BlockReplies::ERROR_INFO_MESSAGE_PARAMETERS];
+            $messageParams = $errorInfo[BlockReplies::ERROR_INFO_MESSAGE_PARAMETERS];
 
             $name = $context->setCurrentBlockId($index)->getProperties()->getProperty(BaseRule::PROPERTY_NAME);
 
@@ -532,10 +511,7 @@ final class BlockInterpreter
 
     /**
      * @param iterable $blocks
-     *
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function debugCheckLooksLikeBlocksArray(iterable $blocks): bool
     {
@@ -545,7 +521,7 @@ final class BlockInterpreter
             $result = $result &&
                 is_int($index) === true &&
                 is_array($block) === true &&
-                static::debugHasKnownBlockType($block) === true;
+                BlockInterpreter::debugHasKnownBlockType($block) === true;
         }
 
         return $result;
@@ -553,12 +529,9 @@ final class BlockInterpreter
 
     /**
      * @param iterable|int[] $blockIndexes
-     * @param array          $blockList
-     * @param int            $blockType
-     *
+     * @param array $blockList
+     * @param int $blockType
      * @return bool
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private static function debugCheckBlocksExist(iterable $blockIndexes, array $blockList, int $blockType): bool
     {
@@ -567,7 +540,7 @@ final class BlockInterpreter
         foreach ($blockIndexes as $index) {
             $result = $result &&
                 array_key_exists($index, $blockList) === true &&
-                static::getBlockType($blockList[$index]) === $blockType;
+                BlockInterpreter::getBlockType($blockList[$index]) === $blockType;
         }
 
         return $result;
@@ -575,21 +548,20 @@ final class BlockInterpreter
 
     /**
      * @param array $block
-     *
      * @return bool
      */
     private static function debugHasKnownBlockType(array $block): bool
     {
         $result = false;
 
-        if (array_key_exists(BlockSerializer::TYPE, $block) === true) {
-            $type = $block[BlockSerializer::TYPE];
+        if (array_key_exists(BlockSerializerInterface::TYPE, $block) === true) {
+            $type = $block[BlockSerializerInterface::TYPE];
 
             $result =
-                $type === BlockSerializer::TYPE__PROCEDURE ||
-                $type === BlockSerializer::TYPE__AND_EXPRESSION ||
-                $type === BlockSerializer::TYPE__OR_EXPRESSION ||
-                $type === BlockSerializer::TYPE__IF_EXPRESSION;
+                $type === BlockSerializerInterface::TYPE__PROCEDURE ||
+                $type === BlockSerializerInterface::TYPE__AND_EXPRESSION ||
+                $type === BlockSerializerInterface::TYPE__OR_EXPRESSION ||
+                $type === BlockSerializerInterface::TYPE__IF_EXPRESSION;
         }
 
         return $result;

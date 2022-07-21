@@ -29,7 +29,6 @@ use Whoa\Validation\Execution\BlockSerializer;
 
 /**
  * @package Whoa\Validation
- *
  * The trait expects the following method to be implemented by a class that uses this trait.
  * - createContextStorageFromBlocks(array $blocks): ContextStorageInterface
  */
@@ -38,7 +37,7 @@ trait SingleValidation
     /**
      * @var RuleInterface
      */
-    private $rule;
+    private RuleInterface $rule;
 
     /**
      * @return RuleInterface
@@ -50,7 +49,6 @@ trait SingleValidation
 
     /**
      * @param RuleInterface $rule
-     *
      * @return self
      */
     private function setRule(RuleInterface $rule): self
@@ -61,22 +59,18 @@ trait SingleValidation
     }
 
     /**
-     * @param mixed                      $input
+     * @param mixed $input
      * @param CaptureAggregatorInterface $captures
-     * @param ErrorAggregatorInterface   $errors
-     *
+     * @param ErrorAggregatorInterface $errors
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function validateSingleImplementation(
         $input,
         CaptureAggregatorInterface $captures,
         ErrorAggregatorInterface $errors
-    ): void
-    {
+    ): void {
         $serialized = (new BlockSerializer())->serialize($this->getRule()->toBlock())->get();
-        $blocks     = BlockSerializer::unserializeBlocks($serialized);
+        $blocks = BlockSerializer::unserializeBlocks($serialized);
 
         // the method is expected to be implemented by a class that uses this trait
         $context = $this->createContextStorageFromBlocks($blocks);

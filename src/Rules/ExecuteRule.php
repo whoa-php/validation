@@ -35,7 +35,7 @@ abstract class ExecuteRule extends BaseRule implements ExecuteRuleInterface
     /**
      * @var array
      */
-    private $properties;
+    private array $properties;
 
     /**
      * @var array $properties

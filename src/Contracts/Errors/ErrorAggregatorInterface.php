@@ -30,7 +30,6 @@ interface ErrorAggregatorInterface extends Countable
 {
     /**
      * @param ErrorInterface $error
-     *
      * @return self
      */
     public function add(ErrorInterface $error): self;

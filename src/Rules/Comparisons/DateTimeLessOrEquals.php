@@ -25,6 +25,7 @@ use DateTimeInterface;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 
 /**
@@ -51,8 +52,8 @@ final class DateTimeLessOrEquals extends BaseOneValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert($value instanceof DateTimeInterface);
-        $result = $value instanceof DateTimeInterface && $value->getTimestamp() <= static::readValue($context);
-
-        return $result;
+        return $value instanceof DateTimeInterface && $value->getTimestamp() <= DateTimeLessOrEquals::readValue(
+                $context
+            );
     }
 }

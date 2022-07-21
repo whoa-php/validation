@@ -39,10 +39,10 @@ class SingleValidator extends BaseValidator
     /**
      * @var ContainerInterface|null
      */
-    private $container;
+    private ?ContainerInterface $container;
 
     /**
-     * @param RuleInterface           $rule
+     * @param RuleInterface $rule
      * @param ContainerInterface|null $container
      */
     public function __construct(RuleInterface $rule, ContainerInterface $container = null)
@@ -55,22 +55,17 @@ class SingleValidator extends BaseValidator
     }
 
     /**
-     * @param RuleInterface           $rule
+     * @param RuleInterface $rule
      * @param ContainerInterface|null $container
-     *
      * @return ValidatorInterface
      */
     public static function validator(RuleInterface $rule, ContainerInterface $container = null): ValidatorInterface
     {
-        $validator = new static($rule, $container);
-
-        return $validator;
+        return new static($rule, $container);
     }
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function validate($input): bool
     {
@@ -81,9 +76,7 @@ class SingleValidator extends BaseValidator
         $this->validateSingleImplementation($input, $this->getCaptureAggregator(), $this->getErrorAggregator());
         $this->markAggregatorsAsDirty();
 
-        $noErrors = $this->getErrorAggregator()->count() <= 0;
-
-        return $noErrors;
+        return $this->getErrorAggregator()->count() <= 0;
     }
 
     /**
@@ -95,11 +88,9 @@ class SingleValidator extends BaseValidator
     }
 
     /**
-     * During validation you can pass to rules your custom context which might have any additional
+     * During validation, you can pass to rule your custom context which might have any additional
      * resources needed by your rules (extra properties, database connection settings, container, and etc).
-     *
      * @param array $blocks
-     *
      * @return ContextStorageInterface
      */
     protected function createContextStorageFromBlocks(array $blocks): ContextStorageInterface

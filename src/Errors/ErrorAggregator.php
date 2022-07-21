@@ -23,6 +23,7 @@ namespace Whoa\Validation\Errors;
 
 use Whoa\Validation\Contracts\Errors\ErrorAggregatorInterface;
 use Whoa\Validation\Contracts\Errors\ErrorInterface;
+
 use function count;
 
 /**
@@ -33,7 +34,7 @@ class ErrorAggregator implements ErrorAggregatorInterface
     /**
      * @var ErrorInterface[]
      */
-    private $errors;
+    private array $errors;
 
     /**
      * Constructor.

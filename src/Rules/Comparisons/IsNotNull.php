@@ -43,8 +43,6 @@ final class IsNotNull extends BaseOneValueComparision
      */
     public static function compare($value, ContextInterface $context): bool
     {
-        $result = $value !== null;
-
-        return $result;
+        return $value !== null;
     }
 }

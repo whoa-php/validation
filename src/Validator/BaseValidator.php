@@ -35,17 +35,17 @@ abstract class BaseValidator implements ValidatorInterface
     /**
      * @var bool
      */
-    private $areAggregatorsDirty = false;
+    private bool $areAggregatorsDirty = false;
 
     /**
      * @var CaptureAggregatorInterface
      */
-    private $captures;
+    private CaptureAggregatorInterface $captures;
 
     /**
      * @var ErrorAggregatorInterface
      */
-    private $errors;
+    private ErrorAggregatorInterface $errors;
 
     /**
      * Constructor.
@@ -127,7 +127,7 @@ abstract class BaseValidator implements ValidatorInterface
     protected function resetAggregators(): self
     {
         $this->captures = $this->createCaptureAggregator();
-        $this->errors   = $this->createErrorAggregator();
+        $this->errors = $this->createErrorAggregator();
 
         $this->areAggregatorsDirty = false;
 

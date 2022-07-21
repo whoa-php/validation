@@ -38,7 +38,6 @@ trait Types
 {
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function isArray(RuleInterface $next = null): RuleInterface
@@ -47,8 +46,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isString(RuleInterface $next = null): RuleInterface
@@ -57,8 +55,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isBool(RuleInterface $next = null): RuleInterface
@@ -67,8 +64,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isInt(RuleInterface $next = null): RuleInterface
@@ -77,8 +73,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isFloat(RuleInterface $next = null): RuleInterface
@@ -87,8 +82,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isNumeric(RuleInterface $next = null): RuleInterface
@@ -97,8 +91,7 @@ trait Types
     }
 
     /**
-     * @param RuleInterface $next
-     *
+     * @param RuleInterface|null $next
      * @return RuleInterface
      */
     protected static function isDateTime(RuleInterface $next = null): RuleInterface

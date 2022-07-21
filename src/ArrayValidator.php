@@ -38,11 +38,11 @@ class ArrayValidator extends BaseValidator
     /**
      * @var ContainerInterface|null
      */
-    private $container;
+    private ?ContainerInterface $container;
 
     /**
      * @param RuleInterface[]|iterable $rules
-     * @param ContainerInterface|null  $container
+     * @param ContainerInterface|null $container
      */
     public function __construct(iterable $rules, ContainerInterface $container = null)
     {
@@ -57,15 +57,12 @@ class ArrayValidator extends BaseValidator
 
     /**
      * @param RuleInterface[]|iterable $rules
-     * @param ContainerInterface|null  $container
-     *
+     * @param ContainerInterface|null $container
      * @return self
      */
     public static function validator(iterable $rules = [], ContainerInterface $container = null): self
     {
-        $validator = new static($rules, $container);
-
-        return $validator;
+        return new static($rules, $container);
     }
 
     /**
@@ -80,9 +77,7 @@ class ArrayValidator extends BaseValidator
         $this->validateArrayImplementation($input, $this->getCaptureAggregator(), $this->getErrorAggregator());
         $this->markAggregatorsAsDirty();
 
-        $isOk = $this->getErrorAggregator()->count() <= 0;
-
-        return $isOk;
+        return $this->getErrorAggregator()->count() <= 0;
     }
 
     /**
@@ -94,11 +89,9 @@ class ArrayValidator extends BaseValidator
     }
 
     /**
-     * During validation you can pass to rules your custom context which might have any additional
+     * During validation, you can pass to rule your custom context which might have any additional
      * resources needed by your rules (extra properties, database connection settings, container, and etc).
-     *
      * @param array $blocks
-     *
      * @return ContextStorageInterface
      */
     protected function createContextStorageFromBlocks(array $blocks): ContextStorageInterface

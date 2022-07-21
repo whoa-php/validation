@@ -29,7 +29,6 @@ use Whoa\Validation\Execution\BlockSerializer;
 
 /**
  * @package Whoa\Validation
- *
  * The trait expects the following method to be implemented by a class that uses this trait.
  * - createContextStorageFromBlocks(array $blocks): ContextStorageInterface
  */
@@ -38,7 +37,7 @@ trait ArrayValidation
     /**
      * @var array
      */
-    private $serializedRules = [];
+    private array $serializedRules = [];
 
     /**
      * @return array
@@ -50,7 +49,6 @@ trait ArrayValidation
 
     /**
      * @param array $serialized
-     *
      * @return self
      */
     public function setSerializedRules(array $serialized): self
@@ -62,7 +60,6 @@ trait ArrayValidation
 
     /**
      * @param RuleInterface[]|iterable $rules
-     *
      * @return self
      */
     private function setRules(iterable $rules): self
@@ -71,20 +68,16 @@ trait ArrayValidation
     }
 
     /**
-     * @param array                      $input
+     * @param array $input
      * @param CaptureAggregatorInterface $captures
-     * @param ErrorAggregatorInterface   $errors
-     *
+     * @param ErrorAggregatorInterface $errors
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function validateArrayImplementation(
         array $input,
         CaptureAggregatorInterface $captures,
         ErrorAggregatorInterface $errors
-    ): void
-    {
+    ): void {
         [$indexMap, $serialized] = $this->getSerializedRules();
 
         $blocks = BlockSerializer::unserializeBlocks($serialized);
@@ -113,7 +106,6 @@ trait ArrayValidation
     /**
      * @return array
      * @var RuleInterface[]|iterable $rules
-     *
      */
     private function serializeRules(iterable $rules): array
     {

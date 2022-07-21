@@ -35,7 +35,6 @@ interface RuleInterface
 
     /**
      * @param string $name
-     *
      * @return RuleInterface
      */
     public function setName(string $name): self;

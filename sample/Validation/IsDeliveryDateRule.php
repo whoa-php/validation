@@ -32,7 +32,7 @@ use Whoa\Validation\Rules\ExecuteRule;
 class IsDeliveryDateRule extends ExecuteRule
 {
     /** @var string Message Template */
-    const MESSAGE_TEMPLATE = 'The value should be a valid delivery date.';
+    public const MESSAGE_TEMPLATE = 'The value should be a valid delivery date.';
 
     /**
      * @inheritDoc
@@ -40,7 +40,7 @@ class IsDeliveryDateRule extends ExecuteRule
     public static function execute($value, ContextInterface $context, $extras = null): array
     {
         $from = new DateTime('tomorrow');
-        $to   = new DateTime('+5 days');
+        $to = new DateTime('+5 days');
 
         $isValidDeliveryDate = $value instanceof DateTimeInterface === true && $value >= $from && $value <= $to;
 

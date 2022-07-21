@@ -21,10 +21,12 @@ declare(strict_types=1);
 
 namespace Whoa\Validation\Blocks;
 
+use ReflectionException;
 use Whoa\Common\Reflection\CheckCallableTrait;
 use Whoa\Validation\Contracts\Blocks\ExecutionBlockInterface;
 use Whoa\Validation\Contracts\Blocks\IfExpressionInterface;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
+
 use function assert;
 
 /**
@@ -42,36 +44,36 @@ final class IfBlock implements IfExpressionInterface
     /**
      * @var ExecutionBlockInterface
      */
-    private $onTrue;
+    private ExecutionBlockInterface $onTrue;
 
     /**
      * @var ExecutionBlockInterface
      */
-    private $onFalse;
+    private ExecutionBlockInterface $onFalse;
 
     /**
      * @var array
      */
-    private $properties;
+    private array $properties;
 
     /**
-     * @param callable                $condition
+     * @param callable $condition
      * @param ExecutionBlockInterface $onTrue
      * @param ExecutionBlockInterface $onFalse
-     * @param array                   $properties
+     * @param array $properties
+     * @throws ReflectionException
      */
     public function __construct(
         callable $condition,
         ExecutionBlockInterface $onTrue,
         ExecutionBlockInterface $onFalse,
         array $properties = []
-    )
-    {
+    ) {
         assert($this->checkConditionCallableSignature($condition));
 
-        $this->condition  = $condition;
-        $this->onTrue     = $onTrue;
-        $this->onFalse    = $onFalse;
+        $this->condition = $condition;
+        $this->onTrue = $onTrue;
+        $this->onFalse = $onFalse;
         $this->properties = $properties;
     }
 
@@ -107,14 +109,13 @@ final class IfBlock implements IfExpressionInterface
         return $this->properties;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection
+    /**
      * @param callable $procedureCallable
-     *
      * @return bool
+     * @throws ReflectionException
      */
     private function checkConditionCallableSignature(callable $procedureCallable): bool
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return static::checkPublicStaticCallable($procedureCallable, [null, ContextInterface::class], 'bool');
+        return IfBlock::checkPublicStaticCallable($procedureCallable, [null, ContextInterface::class], 'bool');
     }
 }

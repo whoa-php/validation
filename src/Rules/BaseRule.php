@@ -27,50 +27,48 @@ use Whoa\Validation\Execution\BlockReplies;
 
 /**
  * @package Whoa\Validation
- *
- * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class BaseRule implements RuleInterface
 {
     /**
      * State key.
      */
-    const STATE_ERROR_VALUE = 0;
+    public const STATE_ERROR_VALUE = 0;
 
     /**
      * State key.
      */
-    const STATE_LAST = self::STATE_ERROR_VALUE;
+    public const STATE_LAST = self::STATE_ERROR_VALUE;
 
     /**
      * Property key.
      */
-    const PROPERTY_NAME = 0;
+    public const PROPERTY_NAME = 0;
 
     /**
      * Property key.
      */
-    const PROPERTY_IS_CAPTURE_ENABLED = self::PROPERTY_NAME + 1;
+    public const PROPERTY_IS_CAPTURE_ENABLED = self::PROPERTY_NAME + 1;
 
     /**
      * Property key.
      */
-    const PROPERTY_LAST = self::PROPERTY_IS_CAPTURE_ENABLED;
+    public const PROPERTY_LAST = self::PROPERTY_IS_CAPTURE_ENABLED;
 
     /**
      * @var string|null
      */
-    private $name = null;
+    private ?string $name = null;
 
     /**
      * @var bool
      */
-    private $isCaptureEnabled = false;
+    private bool $isCaptureEnabled = false;
 
     /**
      * @var RuleInterface|null
      */
-    private $parent = null;
+    private ?RuleInterface $parent = null;
 
     /**
      * @inheritdoc
@@ -170,21 +168,19 @@ abstract class BaseRule implements RuleInterface
 
     /**
      * @param string $name
-     * @param bool   $isCaptureEnabled
-     *
+     * @param bool $isCaptureEnabled
      * @return array
      */
     protected function composeStandardProperties(string $name, bool $isCaptureEnabled): array
     {
         return [
-            static::PROPERTY_NAME               => $name,
+            static::PROPERTY_NAME => $name,
             static::PROPERTY_IS_CAPTURE_ENABLED => $isCaptureEnabled,
         ];
     }
 
     /**
      * @param iterable $messageParams
-     *
      * @return bool
      */
     protected function checkEachValueConvertibleToString(iterable $messageParams): bool
@@ -204,10 +200,7 @@ abstract class BaseRule implements RuleInterface
 
     /**
      * @param mixed $result
-     *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected static function createSuccessReply($result): array
     {
@@ -216,14 +209,11 @@ abstract class BaseRule implements RuleInterface
 
     /**
      * @param ContextInterface $context
-     * @param mixed            $errorValue
-     * @param int              $errorCode
-     * @param string           $messageTemplate
-     * @param array            $messageParams
-     *
+     * @param mixed $errorValue
+     * @param int $errorCode
+     * @param string $messageTemplate
+     * @param array $messageParams
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected static function createErrorReply(
         ContextInterface $context,
@@ -231,8 +221,7 @@ abstract class BaseRule implements RuleInterface
         int $errorCode,
         string $messageTemplate,
         array $messageParams
-    ): array
-    {
+    ): array {
         return BlockReplies::createErrorReply($context, $errorValue, $errorCode, $messageTemplate, $messageParams);
     }
 }

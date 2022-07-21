@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function is_numeric;
 use function is_string;
 
@@ -41,11 +42,11 @@ final class StringToInt extends ExecuteRule
         if (is_string($value) === true &&
             (is_numeric($value) === true || filter_var($value, FILTER_VALIDATE_INT) === true)
         ) {
-            $reply = static::createSuccessReply((int)$value);
+            $reply = StringToInt::createSuccessReply((int)$value);
         } elseif (is_int($value) === true) {
-            $reply = static::createSuccessReply($value);
+            $reply = StringToInt::createSuccessReply($value);
         } else {
-            $reply = static::createErrorReply($context, $value, ErrorCodes::IS_INT, Messages::IS_INT, []);
+            $reply = StringToInt::createErrorReply($context, $value, ErrorCodes::IS_INT, Messages::IS_INT, []);
         }
 
         return $reply;

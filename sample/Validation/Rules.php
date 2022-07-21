@@ -23,6 +23,7 @@ namespace Sample\Validation;
 
 use DateTime;
 use Whoa\Validation\Contracts\Rules\RuleInterface;
+
 use function assert;
 
 /**
@@ -31,7 +32,7 @@ use function assert;
 class Rules extends \Whoa\Validation\Rules
 {
     /** @var string Message Template */
-    const MESSAGE_TEMPLATE_EMAIL = 'The value should be a valid email address.';
+    public const MESSAGE_TEMPLATE_EMAIL = 'The value should be a valid email address.';
 
     /**
      * @return RuleInterface
@@ -43,7 +44,6 @@ class Rules extends \Whoa\Validation\Rules
 
     /**
      * @param int $max
-     *
      * @return RuleInterface
      */
     public static function amount(int $max): RuleInterface

@@ -24,6 +24,7 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function is_scalar;
 
@@ -37,7 +38,7 @@ final class ScalarNotEquals extends BaseOneValueComparision
      */
     public function __construct($value)
     {
-        assert(static::isValidType($value) === true);
+        assert(ScalarNotEquals::isValidType($value) === true);
         parent::__construct(
             $value,
             ErrorCodes::SCALAR_NOT_EQUALS,
@@ -51,15 +52,12 @@ final class ScalarNotEquals extends BaseOneValueComparision
      */
     public static function compare($value, ContextInterface $context): bool
     {
-        assert(static::isValidType($value) === true);
-        $result = static::isValidType($value) === true && $value !== static::readValue($context);
-
-        return $result;
+        assert(ScalarNotEquals::isValidType($value) === true);
+        return ScalarNotEquals::isValidType($value) === true && $value !== ScalarNotEquals::readValue($context);
     }
 
     /**
      * @param mixed $value
-     *
      * @return bool
      */
     private static function isValidType($value): bool

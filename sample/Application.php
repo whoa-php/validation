@@ -36,7 +36,7 @@ class Application
     /**
      * @var bool
      */
-    private $isOutputToConsole;
+    private bool $isOutputToConsole;
 
     /**
      * @param bool $isOutputToConsole
@@ -52,23 +52,23 @@ class Application
     public function run(): void
     {
         $validator = v::validator([
-            'sku'           => r::required(r::sku()),
-            'amount'        => r::required(r::amount(5)),
+            'sku' => r::required(r::sku()),
+            'amount' => r::required(r::amount(5)),
             'delivery_date' => r::nullable(r::deliveryDate()),
-            'email'         => r::email(),
-            'address1'      => r::required(r::address1()),
-            'address2'      => r::address2(),
-            'accepted'      => r::required(r::areTermsAccepted()),
+            'email' => r::email(),
+            'address1' => r::required(r::address1()),
+            'address2' => r::address2(),
+            'accepted' => r::required(r::areTermsAccepted()),
         ]);
 
         // Check with invalid data
         $invalidInput = [
-            'sku'           => '123',
-            'amount'        => '10',
+            'sku' => '123',
+            'amount' => '10',
             'delivery_date' => '2001-01-01',
-            'email'         => 'john.dow',
+            'email' => 'john.dow',
             // 'address1'   => 'Dow 1', // missed required parameter
-            'accepted'      => 'false',
+            'accepted' => 'false',
         ];
         $this->console('Invalid data (errors)' . PHP_EOL);
         $validator->validate($invalidInput);
@@ -78,13 +78,13 @@ class Application
 
         // Check with valid data
         $validInput = [
-            'sku'           => '1',
-            'amount'        => '3',
+            'sku' => '1',
+            'amount' => '3',
             'delivery_date' => (new DateTime('+2 days'))->format(DateTime::ISO8601),
-            'email'         => 'john.dow@mail.foo',
-            'address1'      => 'Dow 1',
-            'address2'      => null,
-            'accepted'      => 'true',
+            'email' => 'john.dow@mail.foo',
+            'address1' => 'Dow 1',
+            'address2' => null,
+            'accepted' => 'true',
         ];
         $this->console(PHP_EOL . 'Valid data (errors)' . PHP_EOL);
         $validator->validate($validInput);
@@ -119,7 +119,6 @@ class Application
 
     /**
      * @param iterable $errors
-     *
      * @return void
      */
     private function printErrors(iterable $errors): void
@@ -130,12 +129,12 @@ class Application
             $hasErrors = true;
 
             /** @var ErrorInterface $error */
-            $paramName  = $error->getParameterName();
-            $entry      = empty($paramName) ? 'Validation' : "Param `$paramName`";
+            $paramName = $error->getParameterName();
+            $entry = empty($paramName) ? 'Validation' : "Param `$paramName`";
             $paramValue = $error->getParameterValue();
-            $errorMsg   = $error->getMessageTemplate();
-            $context    = $error->getMessageParameters();
-            $errorMsg   = MessageFormatter::formatMessage('en', $errorMsg, $context !== null ? $context : []);
+            $errorMsg = $error->getMessageTemplate();
+            $context = $error->getMessageParameters();
+            $errorMsg = MessageFormatter::formatMessage('en', $errorMsg, $context !== null ? $context : []);
 
             $this->console("$entry failed for `$paramValue` with: $errorMsg" . PHP_EOL);
         }
@@ -147,7 +146,6 @@ class Application
 
     /**
      * @param iterable $captures
-     *
      * @return void
      */
     private function printCaptures(iterable $captures): void
@@ -156,8 +154,8 @@ class Application
 
         foreach ($captures as $name => $value) {
             $hasCaptures = true;
-            $type        = gettype($value);
-            $value       = $value instanceof DateTimeInterface ? $value->format(DateTime::ISO8601) : $value;
+            $type = gettype($value);
+            $value = $value instanceof DateTimeInterface ? $value->format(DateTime::ISO8601) : $value;
             $this->console("`$name` = `$value` ($type)" . PHP_EOL);
         }
 

@@ -38,7 +38,6 @@ trait Converters
 {
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringToBool(RuleInterface $next = null): RuleInterface
@@ -49,7 +48,6 @@ trait Converters
     /**
      * @param string $format
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringToDateTime(string $format, RuleInterface $next = null): RuleInterface
@@ -59,7 +57,6 @@ trait Converters
 
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringToFloat(RuleInterface $next = null): RuleInterface
@@ -69,7 +66,6 @@ trait Converters
 
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringToInt(RuleInterface $next = null): RuleInterface
@@ -79,7 +75,6 @@ trait Converters
 
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringArrayToIntArray(RuleInterface $next = null): RuleInterface
@@ -89,7 +84,6 @@ trait Converters
 
     /**
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringArrayToStringArray(RuleInterface $next = null): RuleInterface
@@ -101,7 +95,6 @@ trait Converters
      * @param string $delimiter
      * @param int $limit
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringToArray(

@@ -21,10 +21,12 @@ declare(strict_types=1);
 
 namespace Whoa\Validation\Blocks;
 
+use ReflectionException;
 use Whoa\Common\Reflection\CheckCallableTrait;
 use Whoa\Validation\Contracts\Blocks\ProcedureBlockInterface;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use ReflectionParameter;
+
 use function assert;
 
 /**
@@ -52,11 +54,11 @@ final class ProcedureBlock implements ProcedureBlockInterface
     /**
      * @var array
      */
-    private $properties;
+    private array $properties;
 
     /**
-     * @param callable      $executeCallable
-     * @param array         $properties
+     * @param callable $executeCallable
+     * @param array $properties
      * @param callable|null $startCallable
      * @param callable|null $endCallable
      */
@@ -65,8 +67,7 @@ final class ProcedureBlock implements ProcedureBlockInterface
         array $properties = [],
         callable $startCallable = null,
         callable $endCallable = null
-    )
-    {
+    ) {
         $this->setExecuteCallable($executeCallable)->setProperties($properties);
 
         if ($startCallable !== null) {
@@ -112,7 +113,6 @@ final class ProcedureBlock implements ProcedureBlockInterface
 
     /**
      * @param array $properties
-     *
      * @return self
      */
     public function setProperties(array $properties): self
@@ -124,7 +124,6 @@ final class ProcedureBlock implements ProcedureBlockInterface
 
     /**
      * @param callable $startCallable
-     *
      * @return self
      */
     public function setStartCallable(callable $startCallable): self
@@ -138,7 +137,6 @@ final class ProcedureBlock implements ProcedureBlockInterface
 
     /**
      * @param callable $endCallable
-     *
      * @return self
      */
     public function setEndCallable(callable $endCallable): self
@@ -152,7 +150,6 @@ final class ProcedureBlock implements ProcedureBlockInterface
 
     /**
      * @param callable $executeCallable
-     *
      * @return self
      */
     private function setExecuteCallable(callable $executeCallable): self
@@ -164,15 +161,14 @@ final class ProcedureBlock implements ProcedureBlockInterface
         return $this;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection
+    /**
      * @param callable $procedureCallable
-     *
      * @return bool
+     * @throws ReflectionException
      */
     private function checkProcedureExecuteCallableSignature(callable $procedureCallable): bool
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return static::checkPublicStaticCallable(
+        return ProcedureBlock::checkPublicStaticCallable(
             $procedureCallable,
             [
                 null,
@@ -185,14 +181,13 @@ final class ProcedureBlock implements ProcedureBlockInterface
         );
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection
+    /**
      * @param callable $procedureCallable
-     *
      * @return bool
+     * @throws ReflectionException
      */
     private function checkProcedureStartOrEndCallableSignature(callable $procedureCallable): bool
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return static::checkPublicStaticCallable($procedureCallable, [ContextInterface::class], 'array');
+        return ProcedureBlock::checkPublicStaticCallable($procedureCallable, [ContextInterface::class], 'array');
     }
 }

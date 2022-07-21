@@ -27,9 +27,8 @@ namespace Whoa\Validation\Contracts\Execution;
 interface BlockPropertiesInterface
 {
     /**
-     * @param int   $key
+     * @param int $key
      * @param mixed $default
-     *
      * @return mixed
      */
     public function getProperty(int $key, $default = null);

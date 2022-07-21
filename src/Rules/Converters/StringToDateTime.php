@@ -27,6 +27,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function assert;
 use function is_string;
 
@@ -36,7 +37,7 @@ use function is_string;
 final class StringToDateTime extends ExecuteRule
 {
     /** @var int Property key */
-    const PROPERTY_FORMAT = self::PROPERTY_LAST + 1;
+    public const PROPERTY_FORMAT = self::PROPERTY_LAST + 1;
 
     /**
      * @param string $format
@@ -56,13 +57,13 @@ final class StringToDateTime extends ExecuteRule
     public static function execute($value, ContextInterface $context, $extras = null): array
     {
         $format = $context->getProperties()->getProperty(self::PROPERTY_FORMAT);
-        if (is_string($value) === true && ($parsed = static::parseFromFormat($value, $format)) !== null) {
-            return static::createSuccessReply($parsed);
+        if (is_string($value) === true && ($parsed = StringToDateTime::parseFromFormat($value, $format)) !== null) {
+            return StringToDateTime::createSuccessReply($parsed);
         } elseif ($value instanceof DateTimeInterface) {
-            return static::createSuccessReply($value);
+            return StringToDateTime::createSuccessReply($value);
         }
 
-        return static::createErrorReply(
+        return StringToDateTime::createErrorReply(
             $context,
             $value,
             ErrorCodes::IS_DATE_TIME,
@@ -74,12 +75,9 @@ final class StringToDateTime extends ExecuteRule
     /**
      * @param string $input
      * @param string $format
-     *
      * @return DateTimeInterface|null
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private static function parseFromFormat(string $input, string $format)
+    private static function parseFromFormat(string $input, string $format): ?DateTimeInterface
     {
         $parsedOrNull = null;
 

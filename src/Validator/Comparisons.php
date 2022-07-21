@@ -53,12 +53,9 @@ use Whoa\Validation\Rules\Generic\OrOperator;
 trait Comparisons
 {
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     protected static function equals($value, RuleInterface $next = null): RuleInterface
     {
@@ -74,12 +71,9 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     protected static function notEquals($value, RuleInterface $next = null): RuleInterface
     {
@@ -95,9 +89,8 @@ trait Comparisons
     }
 
     /**
-     * @param array              $scalars
+     * @param array $scalars
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function inValues(array $scalars, RuleInterface $next = null): RuleInterface
@@ -106,9 +99,8 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function lessThan($value, RuleInterface $next = null): RuleInterface
@@ -119,9 +111,8 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function lessOrEquals($value, RuleInterface $next = null): RuleInterface
@@ -132,9 +123,8 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function moreThan($value, RuleInterface $next = null): RuleInterface
@@ -145,7 +135,7 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $value
+     * @param mixed $value
      * @param RuleInterface|null $next
      *
      * @return RuleInterface
@@ -159,10 +149,9 @@ trait Comparisons
     }
 
     /**
-     * @param mixed              $lowerLimit
-     * @param mixed              $upperLimit
+     * @param mixed $lowerLimit
+     * @param mixed $upperLimit
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function between($lowerLimit, $upperLimit, RuleInterface $next = null): RuleInterface
@@ -176,10 +165,9 @@ trait Comparisons
     }
 
     /**
-     * @param int                $min
-     * @param int                $max
+     * @param int $min
+     * @param int $max
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringLengthBetween(int $min, int $max, RuleInterface $next = null): RuleInterface
@@ -190,9 +178,8 @@ trait Comparisons
     }
 
     /**
-     * @param int                $min
+     * @param int $min
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringLengthMin(int $min, RuleInterface $next = null): RuleInterface
@@ -203,9 +190,8 @@ trait Comparisons
     }
 
     /**
-     * @param int                $max
+     * @param int $max
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function stringLengthMax(int $max, RuleInterface $next = null): RuleInterface
@@ -216,9 +202,8 @@ trait Comparisons
     }
 
     /**
-     * @param string             $pattern
+     * @param string $pattern
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function regexp(string $pattern, RuleInterface $next = null): RuleInterface
@@ -230,7 +215,6 @@ trait Comparisons
 
     /**
      * @param RuleInterface $rule
-     *
      * @return RuleInterface
      */
     protected static function nullable(RuleInterface $rule): RuleInterface

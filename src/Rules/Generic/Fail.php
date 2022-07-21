@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function assert;
 
 /**
@@ -33,30 +34,29 @@ use function assert;
 final class Fail extends ExecuteRule
 {
     /** @var int Property key */
-    const PROPERTY_ERROR_CODE = self::PROPERTY_LAST + 1;
+    public const PROPERTY_ERROR_CODE = self::PROPERTY_LAST + 1;
 
     /** @var int Property key */
-    const PROPERTY_ERROR_MESSAGE_TEMPLATE = self::PROPERTY_ERROR_CODE + 1;
+    public const PROPERTY_ERROR_MESSAGE_TEMPLATE = self::PROPERTY_ERROR_CODE + 1;
 
     /** @var int Property key */
-    const PROPERTY_ERROR_MESSAGE_PARAMETERS = self::PROPERTY_ERROR_MESSAGE_TEMPLATE + 1;
+    public const PROPERTY_ERROR_MESSAGE_PARAMETERS = self::PROPERTY_ERROR_MESSAGE_TEMPLATE + 1;
 
     /**
-     * @param int    $errorCode
+     * @param int $errorCode
      * @param string $messageTemplate
-     * @param array  $messageParams
+     * @param array $messageParams
      */
     public function __construct(
         int $errorCode = ErrorCodes::INVALID_VALUE,
         string $messageTemplate = Messages::INVALID_VALUE,
         array $messageParams = []
-    )
-    {
+    ) {
         assert($this->checkEachValueConvertibleToString($messageParams));
 
         parent::__construct([
-            self::PROPERTY_ERROR_CODE               => $errorCode,
-            self::PROPERTY_ERROR_MESSAGE_TEMPLATE   => $messageTemplate,
+            self::PROPERTY_ERROR_CODE => $errorCode,
+            self::PROPERTY_ERROR_MESSAGE_TEMPLATE => $messageTemplate,
             self::PROPERTY_ERROR_MESSAGE_PARAMETERS => $messageParams,
         ]);
     }
@@ -68,7 +68,7 @@ final class Fail extends ExecuteRule
     {
         $properties = $context->getProperties();
 
-        return static::createErrorReply(
+        return Fail::createErrorReply(
             $context,
             $value,
             $properties->getProperty(self::PROPERTY_ERROR_CODE),

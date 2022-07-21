@@ -24,13 +24,14 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function is_numeric;
 
 /**
  * @package Whoa\Validation
  */
-final class NumericBetween extends BaseTwoValueComparision
+final class NumericBetween extends BaseTwoValueComparison
 {
     /**
      * @param mixed $lowerValue
@@ -54,10 +55,7 @@ final class NumericBetween extends BaseTwoValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert(is_numeric($value) === true);
-        $result =
-            is_numeric($value) === true &&
-            static::readLowerValue($context) <= $value && $value <= static::readUpperValue($context);
-
-        return $result;
+        return is_numeric($value) === true &&
+            NumericBetween::readLowerValue($context) <= $value && $value <= NumericBetween::readUpperValue($context);
     }
 }

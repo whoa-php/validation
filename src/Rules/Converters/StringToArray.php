@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function assert;
 use function explode;
 use function is_string;
@@ -36,14 +37,14 @@ use function strlen;
 final class StringToArray extends ExecuteRule
 {
     /** @var int Property key */
-    const PROPERTY_DELIMITER = self::PROPERTY_LAST + 1;
+    public const PROPERTY_DELIMITER = self::PROPERTY_LAST + 1;
 
     /** @var int Property key */
-    const PROPERTY_LIMIT = self::PROPERTY_DELIMITER + 1;
+    public const PROPERTY_LIMIT = self::PROPERTY_DELIMITER + 1;
 
     /**
      * @param string $delimiter
-     * @param int    $limit
+     * @param int $limit
      */
     public function __construct(string $delimiter, int $limit = PHP_INT_MAX)
     {
@@ -52,7 +53,7 @@ final class StringToArray extends ExecuteRule
 
         parent::__construct([
             self::PROPERTY_DELIMITER => $delimiter,
-            self::PROPERTY_LIMIT     => $limit,
+            self::PROPERTY_LIMIT => $limit,
         ]);
     }
 
@@ -66,13 +67,13 @@ final class StringToArray extends ExecuteRule
         $result = [];
         if (is_string($value) === true) {
             $properties = $context->getProperties();
-            $delimiter  = $properties->getProperty(static::PROPERTY_DELIMITER);
-            $limit      = $properties->getProperty(static::PROPERTY_LIMIT);
-            $result     = explode($delimiter, $value, $limit);
+            $delimiter = $properties->getProperty(StringToArray::PROPERTY_DELIMITER);
+            $limit = $properties->getProperty(StringToArray::PROPERTY_LIMIT);
+            $result = explode($delimiter, $value, $limit);
         } else {
-            $reply = static::createErrorReply($context, $value, ErrorCodes::IS_STRING, Messages::IS_STRING, []);
+            $reply = StringToArray::createErrorReply($context, $value, ErrorCodes::IS_STRING, Messages::IS_STRING, []);
         }
 
-        return $reply !== null ? $reply : static::createSuccessReply($result);
+        return $reply !== null ? $reply : StringToArray::createSuccessReply($result);
     }
 }

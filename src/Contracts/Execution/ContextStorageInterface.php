@@ -28,7 +28,6 @@ interface ContextStorageInterface extends ContextInterface
 {
     /**
      * @param int $index
-     *
      * @return self
      */
     public function setCurrentBlockId(int $index): self;

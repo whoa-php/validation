@@ -30,6 +30,7 @@ use Whoa\Validation\Captures\CaptureAggregator;
 use Whoa\Validation\Contracts\Blocks\ExecutionBlockInterface;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Errors\ErrorInterface;
+use Whoa\Validation\Contracts\Execution\BlockSerializerInterface;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\Errors\ErrorAggregator;
 use Whoa\Validation\Exceptions\UnknownExecutionBlockType;
@@ -42,6 +43,7 @@ use Whoa\Validation\Rules\BaseRule;
 use Whoa\Validation\Rules\Generic\Fail;
 use Whoa\Validation\Rules\Generic\Success;
 use PHPUnit\Framework\TestCase;
+
 use function assert;
 
 /**
@@ -52,36 +54,35 @@ class BlockSerializationAndInterpretationTest extends TestCase
     /**
      * Procedure callable.
      */
-    const PROCEDURE_EXEC_SUCCESS = [self::class, 'procedureExecuteSuccess'];
+    public const PROCEDURE_EXEC_SUCCESS = [self::class, 'procedureExecuteSuccess'];
 
     /**
      * Procedure callable.
      */
-    const PROCEDURE_EXEC_ERROR = [self::class, 'procedureExecuteError'];
+    public const PROCEDURE_EXEC_ERROR = [self::class, 'procedureExecuteError'];
 
     /**
      * Procedure callable.
      */
-    const PROCEDURE_START_SUCCESS = [self::class, 'procedureStartSuccess'];
+    public const PROCEDURE_START_SUCCESS = [self::class, 'procedureStartSuccess'];
 
     /**
      * Procedure callable.
      */
-    const PROCEDURE_START_ERROR = [self::class, 'procedureStartError'];
+    public const PROCEDURE_START_ERROR = [self::class, 'procedureStartError'];
 
     /**
      * Procedure callable.
      */
-    const PROCEDURE_END_SUCCESS = [self::class, 'procedureEndSuccess'];
+    public const PROCEDURE_END_SUCCESS = [self::class, 'procedureEndSuccess'];
 
     /**
      * Procedure callable.
      */
-    const PROCEDURE_END_ERROR = [self::class, 'procedureEndError'];
+    public const PROCEDURE_END_ERROR = [self::class, 'procedureEndError'];
 
     /**
      * Test procedure block serialization.
-     *
      * @throws Exception
      */
     public function testSerializeProcedureBlock(): void
@@ -96,23 +97,22 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
         $this->assertEquals([
-            BlockSerializer::SERIALIZATION_BLOCKS            => [
+            BlockSerializerInterface::SERIALIZATION_BLOCKS => [
                 0 => [
-                    BlockSerializer::TYPE                       => BlockSerializer::TYPE__PROCEDURE,
-                    BlockSerializer::PROPERTIES                 => ['any' => 'properties'],
-                    BlockSerializer::PROCEDURE_EXECUTE_CALLABLE => static::PROCEDURE_EXEC_SUCCESS,
-                    BlockSerializer::PROCEDURE_START_CALLABLE   => static::PROCEDURE_START_SUCCESS,
-                    BlockSerializer::PROCEDURE_END_CALLABLE     => static::PROCEDURE_END_SUCCESS,
+                    BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__PROCEDURE,
+                    BlockSerializerInterface::PROPERTIES => ['any' => 'properties'],
+                    BlockSerializerInterface::PROCEDURE_EXECUTE_CALLABLE => static::PROCEDURE_EXEC_SUCCESS,
+                    BlockSerializerInterface::PROCEDURE_START_CALLABLE => static::PROCEDURE_START_SUCCESS,
+                    BlockSerializerInterface::PROCEDURE_END_CALLABLE => static::PROCEDURE_END_SUCCESS,
                 ],
             ],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_START => [0],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_END   => [0],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_START => [0],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_END => [0],
         ], $serialized);
     }
 
     /**
      * Test AND block serialization.
-     *
      * @throws Exception
      */
     public function testSerializeAndBlock(): void
@@ -126,24 +126,23 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
         $this->assertEquals([
-            BlockSerializer::SERIALIZATION_BLOCKS            => [
+            BlockSerializerInterface::SERIALIZATION_BLOCKS => [
                 0 => [
-                    BlockSerializer::TYPE                     => BlockSerializer::TYPE__AND_EXPRESSION,
-                    BlockSerializer::PROPERTIES               => ['any' => 'properties'],
-                    BlockSerializer::AND_EXPRESSION_PRIMARY   => 1,
-                    BlockSerializer::AND_EXPRESSION_SECONDARY => 2,
+                    BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__AND_EXPRESSION,
+                    BlockSerializerInterface::PROPERTIES => ['any' => 'properties'],
+                    BlockSerializerInterface::AND_EXPRESSION_PRIMARY => 1,
+                    BlockSerializerInterface::AND_EXPRESSION_SECONDARY => 2,
                 ],
                 1 => $this->getSampleSerializationForSuccess(),
                 2 => $this->getSampleSerializationForFail(),
             ],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_START => [],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_END   => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_START => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_END => [],
         ], $serialized);
     }
 
     /**
      * Test OR block serialization.
-     *
      * @throws Exception
      */
     public function testSerializeOrBlock(): void
@@ -157,30 +156,29 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
         $this->assertEquals([
-            BlockSerializer::SERIALIZATION_BLOCKS            => [
+            BlockSerializerInterface::SERIALIZATION_BLOCKS => [
                 0 => [
-                    BlockSerializer::TYPE                    => BlockSerializer::TYPE__OR_EXPRESSION,
-                    BlockSerializer::PROPERTIES              => ['any' => 'properties'],
-                    BlockSerializer::OR_EXPRESSION_PRIMARY   => 1,
-                    BlockSerializer::OR_EXPRESSION_SECONDARY => 2,
+                    BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__OR_EXPRESSION,
+                    BlockSerializerInterface::PROPERTIES => ['any' => 'properties'],
+                    BlockSerializerInterface::OR_EXPRESSION_PRIMARY => 1,
+                    BlockSerializerInterface::OR_EXPRESSION_SECONDARY => 2,
                 ],
                 1 => $this->getSampleSerializationForSuccess(),
                 2 => $this->getSampleSerializationForFail(),
             ],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_START => [],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_END   => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_START => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_END => [],
         ], $serialized);
     }
 
     /**
      * Test IF block serialization.
-     *
      * @throws Exception
      */
     public function testSerializeIfBlock(): void
     {
         $condition = [static::class, 'ifBlockCondition'];
-        $block     = new IfBlock(
+        $block = new IfBlock(
             $condition,
             (new Success())->toBlock(),
             (new Fail())->toBlock(),
@@ -190,25 +188,24 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
         $this->assertEquals([
-            BlockSerializer::SERIALIZATION_BLOCKS            => [
+            BlockSerializerInterface::SERIALIZATION_BLOCKS => [
                 0 => [
-                    BlockSerializer::TYPE                             => BlockSerializer::TYPE__IF_EXPRESSION,
-                    BlockSerializer::PROPERTIES                       => ['any' => 'properties'],
-                    BlockSerializer::IF_EXPRESSION_CONDITION_CALLABLE => $condition,
-                    BlockSerializer::IF_EXPRESSION_ON_TRUE_BLOCK      => 1,
-                    BlockSerializer::IF_EXPRESSION_ON_FALSE_BLOCK     => 2,
+                    BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__IF_EXPRESSION,
+                    BlockSerializerInterface::PROPERTIES => ['any' => 'properties'],
+                    BlockSerializerInterface::IF_EXPRESSION_CONDITION_CALLABLE => $condition,
+                    BlockSerializerInterface::IF_EXPRESSION_ON_TRUE_BLOCK => 1,
+                    BlockSerializerInterface::IF_EXPRESSION_ON_FALSE_BLOCK => 2,
                 ],
                 1 => $this->getSampleSerializationForSuccess(),
                 2 => $this->getSampleSerializationForFail(),
             ],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_START => [],
-            BlockSerializer::SERIALIZATION_BLOCKS_WITH_END   => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_START => [],
+            BlockSerializerInterface::SERIALIZATION_BLOCKS_WITH_END => [],
         ], $serialized);
     }
 
     /**
      * Test block interpreter.
-     *
      * @throws Exception
      */
     public function testInterpretProcedureSuccess(): void
@@ -216,7 +213,7 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $block = new ProcedureBlock(
             static::PROCEDURE_EXEC_SUCCESS,
             [
-                BaseRule::PROPERTY_NAME               => 'name',
+                BaseRule::PROPERTY_NAME => 'name',
                 BaseRule::PROPERTY_IS_CAPTURE_ENABLED => true,
             ],
             static::PROCEDURE_START_SUCCESS,
@@ -225,9 +222,9 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
-        $context  = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
+        $context = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
         $captures = new CaptureAggregator();
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
 
         $isOk = BlockInterpreter::execute('whatever', $serialized, $context, $captures, $errors);
 
@@ -240,7 +237,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * Test block interpreter.
-     *
      * @throws Exception
      */
     public function testInterpretProcedureError(): void
@@ -248,7 +244,7 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $block = new ProcedureBlock(
             static::PROCEDURE_EXEC_ERROR,
             [
-                BaseRule::PROPERTY_NAME               => 'name',
+                BaseRule::PROPERTY_NAME => 'name',
                 BaseRule::PROPERTY_IS_CAPTURE_ENABLED => true,
             ],
             static::PROCEDURE_START_SUCCESS,
@@ -257,16 +253,15 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
-        $context  = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
+        $context = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
         $captures = new CaptureAggregator();
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
 
         $isOk = BlockInterpreter::execute('whatever', $serialized, $context, $captures, $errors);
 
         $this->assertFalse($isOk);
         $this->assertEmpty($captures->get());
         $this->assertCount(1, $errors->get());
-        /** @var ErrorInterface $error */
         $error = $errors->get()[0];
         $this->assertEquals('name', $error->getParameterName());
         $this->assertEquals('whatever', $error->getParameterValue());
@@ -276,7 +271,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * Test block interpreter.
-     *
      * @throws Exception
      */
     public function testInterpretProcedureStartError(): void
@@ -284,7 +278,7 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $block = new ProcedureBlock(
             static::PROCEDURE_EXEC_SUCCESS,
             [
-                BaseRule::PROPERTY_NAME               => 'name',
+                BaseRule::PROPERTY_NAME => 'name',
                 BaseRule::PROPERTY_IS_CAPTURE_ENABLED => true,
             ],
             static::PROCEDURE_START_ERROR,
@@ -293,15 +287,14 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
-        $context  = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
+        $context = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
         $captures = new CaptureAggregator();
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
 
         BlockInterpreter::execute('whatever', $serialized, $context, $captures, $errors);
 
         $this->assertEquals(['name' => 'whatever'], $captures->get());
         $this->assertCount(1, $errors->get());
-        /** @var ErrorInterface $error */
         $error = $errors->get()[0];
         $this->assertEquals('name', $error->getParameterName());
         $this->assertEquals(null, $error->getParameterValue());
@@ -310,7 +303,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * Test block interpreter.
-     *
      * @throws Exception
      */
     public function testInterpretProcedureEndError(): void
@@ -318,7 +310,7 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $block = new ProcedureBlock(
             static::PROCEDURE_EXEC_SUCCESS,
             [
-                BaseRule::PROPERTY_NAME               => 'name',
+                BaseRule::PROPERTY_NAME => 'name',
                 BaseRule::PROPERTY_IS_CAPTURE_ENABLED => true,
             ],
             static::PROCEDURE_START_SUCCESS,
@@ -327,15 +319,14 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
-        $context  = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
+        $context = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
         $captures = new CaptureAggregator();
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
 
         BlockInterpreter::execute('whatever', $serialized, $context, $captures, $errors);
 
         $this->assertEquals(['name' => 'whatever'], $captures->get());
         $this->assertCount(1, $errors->get());
-        /** @var ErrorInterface $error */
         $error = $errors->get()[0];
         $this->assertEquals('name', $error->getParameterName());
         $this->assertEquals(null, $error->getParameterValue());
@@ -344,7 +335,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * Test block interpreter.
-     *
      * @throws Exception
      */
     public function testInterpretProcedureStartExecEndError(): void
@@ -352,7 +342,7 @@ class BlockSerializationAndInterpretationTest extends TestCase
         $block = new ProcedureBlock(
             static::PROCEDURE_EXEC_ERROR,
             [
-                BaseRule::PROPERTY_NAME               => 'name',
+                BaseRule::PROPERTY_NAME => 'name',
                 BaseRule::PROPERTY_IS_CAPTURE_ENABLED => true,
             ],
             static::PROCEDURE_START_ERROR,
@@ -361,16 +351,15 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
         $serialized = (new BlockSerializer())->serialize($block)->get();
 
-        $context  = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
+        $context = new ContextStorage(BlockSerializer::unserializeBlocks($serialized));
         $captures = new CaptureAggregator();
-        $errors   = new ErrorAggregator();
+        $errors = new ErrorAggregator();
 
         BlockInterpreter::execute('whatever', $serialized, $context, $captures, $errors);
 
         $this->assertEmpty($captures->get());
         $this->assertCount(3, $errors->get());
 
-        /** @var ErrorInterface $error */
         $error = $errors->get()[0];
         $this->assertEquals('name', $error->getParameterName());
         $this->assertEquals(null, $error->getParameterValue());
@@ -411,9 +400,8 @@ class BlockSerializationAndInterpretationTest extends TestCase
     }
 
     /**
-     * @param mixed            $input
+     * @param mixed $input
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureExecuteSuccess($input, ContextInterface $context): array
@@ -424,9 +412,8 @@ class BlockSerializationAndInterpretationTest extends TestCase
     }
 
     /**
-     * @param mixed            $input
+     * @param mixed $input
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureExecuteError($input, ContextInterface $context): array
@@ -442,7 +429,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureStartSuccess(ContextInterface $context): array
@@ -454,7 +440,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureStartError(ContextInterface $context): array
@@ -469,7 +454,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureEndSuccess(ContextInterface $context): array
@@ -481,7 +465,6 @@ class BlockSerializationAndInterpretationTest extends TestCase
 
     /**
      * @param ContextInterface $context
-     *
      * @return array
      */
     public static function procedureEndError(ContextInterface $context): array
@@ -495,9 +478,8 @@ class BlockSerializationAndInterpretationTest extends TestCase
     }
 
     /**
-     * @param mixed            $value
+     * @param mixed $value
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function ifBlockCondition($value, ContextInterface $context): bool
@@ -514,12 +496,12 @@ class BlockSerializationAndInterpretationTest extends TestCase
     private function getSampleSerializationForSuccess(): array
     {
         return [
-            BlockSerializer::TYPE                       => BlockSerializer::TYPE__PROCEDURE,
-            BlockSerializer::PROPERTIES                 => [
-                Success::PROPERTY_NAME               => '',
-                Success::PROPERTY_IS_CAPTURE_ENABLED => false,
+            BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__PROCEDURE,
+            BlockSerializerInterface::PROPERTIES => [
+                BaseRule::PROPERTY_NAME => '',
+                BaseRule::PROPERTY_IS_CAPTURE_ENABLED => false,
             ],
-            BlockSerializer::PROCEDURE_EXECUTE_CALLABLE => [Success::class, 'execute'],
+            BlockSerializerInterface::PROCEDURE_EXECUTE_CALLABLE => [Success::class, 'execute'],
         ];
     }
 
@@ -529,15 +511,15 @@ class BlockSerializationAndInterpretationTest extends TestCase
     private function getSampleSerializationForFail(): array
     {
         return [
-            BlockSerializer::TYPE                       => BlockSerializer::TYPE__PROCEDURE,
-            BlockSerializer::PROPERTIES                 => [
-                Fail::PROPERTY_NAME                     => '',
-                Fail::PROPERTY_IS_CAPTURE_ENABLED       => false,
-                Fail::PROPERTY_ERROR_CODE               => ErrorCodes::INVALID_VALUE,
-                Fail::PROPERTY_ERROR_MESSAGE_TEMPLATE   => Messages::INVALID_VALUE,
+            BlockSerializerInterface::TYPE => BlockSerializerInterface::TYPE__PROCEDURE,
+            BlockSerializerInterface::PROPERTIES => [
+                BaseRule::PROPERTY_NAME => '',
+                BaseRule::PROPERTY_IS_CAPTURE_ENABLED => false,
+                Fail::PROPERTY_ERROR_CODE => ErrorCodes::INVALID_VALUE,
+                Fail::PROPERTY_ERROR_MESSAGE_TEMPLATE => Messages::INVALID_VALUE,
                 Fail::PROPERTY_ERROR_MESSAGE_PARAMETERS => [],
             ],
-            BlockSerializer::PROCEDURE_EXECUTE_CALLABLE => [Fail::class, 'execute'],
+            BlockSerializerInterface::PROCEDURE_EXECUTE_CALLABLE => [Fail::class, 'execute'],
         ];
     }
 }

@@ -28,6 +28,7 @@ use Whoa\Validation\Contracts\Blocks\OrExpressionInterface;
 use Whoa\Validation\Contracts\Blocks\ProcedureBlockInterface;
 use Whoa\Validation\Contracts\Execution\BlockSerializerInterface;
 use Whoa\Validation\Exceptions\UnknownExecutionBlockType;
+
 use function array_key_exists;
 use function assert;
 use function count;
@@ -45,22 +46,22 @@ final class BlockSerializer implements BlockSerializerInterface
     /**
      * @var int
      */
-    private $currentBlockIndex = 0;
+    private int $currentBlockIndex = 0;
 
     /**
      * @var array
      */
-    private $serializedBlocks = [];
+    private array $serializedBlocks = [];
 
     /**
      * @var int[]
      */
-    private $blocksWithStart = [];
+    private array $blocksWithStart = [];
 
     /**
      * @var int[]
      */
-    private $blocksWithEnd = [];
+    private array $blocksWithEnd = [];
 
     /**
      * @inheritdoc
@@ -74,8 +75,6 @@ final class BlockSerializer implements BlockSerializerInterface
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function addBlock(ExecutionBlockInterface $block): int
     {
@@ -125,7 +124,7 @@ final class BlockSerializer implements BlockSerializerInterface
     public function clearBlocks(): BlockSerializerInterface
     {
         $this->currentBlockIndex = 0;
-        $this->serializedBlocks  = [];
+        $this->serializedBlocks = [];
 
 
         return $this;
@@ -157,9 +156,9 @@ final class BlockSerializer implements BlockSerializerInterface
     public function get(): array
     {
         return [
-            static::SERIALIZATION_BLOCKS            => $this->getSerializedBlocks(),
-            static::SERIALIZATION_BLOCKS_WITH_START => $this->getBlocksWithStart(),
-            static::SERIALIZATION_BLOCKS_WITH_END   => $this->getBlocksWithEnd(),
+            BlockSerializer::SERIALIZATION_BLOCKS => $this->getSerializedBlocks(),
+            BlockSerializer::SERIALIZATION_BLOCKS_WITH_START => $this->getBlocksWithStart(),
+            BlockSerializer::SERIALIZATION_BLOCKS_WITH_END => $this->getBlocksWithEnd(),
         ];
     }
 
@@ -170,7 +169,7 @@ final class BlockSerializer implements BlockSerializerInterface
     {
         assert(count($serialized) === 3); // blocks, starts, ends
 
-        return static::readProperty(static::SERIALIZATION_BLOCKS, $serialized);
+        return BlockSerializer::readProperty(BlockSerializer::SERIALIZATION_BLOCKS, $serialized);
     }
 
     /**
@@ -180,7 +179,7 @@ final class BlockSerializer implements BlockSerializerInterface
     {
         assert(count($serialized) === 3); // blocks, starts, ends
 
-        return static::readProperty(static::SERIALIZATION_BLOCKS_WITH_START, $serialized);
+        return BlockSerializer::readProperty(BlockSerializer::SERIALIZATION_BLOCKS_WITH_START, $serialized);
     }
 
     /**
@@ -190,13 +189,12 @@ final class BlockSerializer implements BlockSerializerInterface
     {
         assert(count($serialized) === 3); // blocks, starts, ends
 
-        return static::readProperty(static::SERIALIZATION_BLOCKS_WITH_END, $serialized);
+        return BlockSerializer::readProperty(BlockSerializer::SERIALIZATION_BLOCKS_WITH_END, $serialized);
     }
 
     /**
-     * @param int   $key
+     * @param int $key
      * @param array $properties
-     *
      * @return mixed
      */
     private static function readProperty(int $key, array $properties)
@@ -216,7 +214,6 @@ final class BlockSerializer implements BlockSerializerInterface
 
     /**
      * @param ProcedureBlockInterface $procedure
-     *
      * @return int
      */
     private function serializeProcedure(ProcedureBlockInterface $procedure): int
@@ -224,19 +221,19 @@ final class BlockSerializer implements BlockSerializerInterface
         $index = $this->allocateIndex();
 
         $serialized = [
-            static::TYPE                       => static::TYPE__PROCEDURE,
-            static::PROCEDURE_EXECUTE_CALLABLE => $procedure->getExecuteCallable(),
+            BlockSerializer::TYPE => BlockSerializer::TYPE__PROCEDURE,
+            BlockSerializer::PROCEDURE_EXECUTE_CALLABLE => $procedure->getExecuteCallable(),
         ];
         if ($procedure->getStartCallable() !== null) {
-            $serialized[static::PROCEDURE_START_CALLABLE] = $procedure->getStartCallable();
-            $this->blocksWithStart[]                      = $index;
+            $serialized[BlockSerializer::PROCEDURE_START_CALLABLE] = $procedure->getStartCallable();
+            $this->blocksWithStart[] = $index;
         }
         if ($procedure->getEndCallable() !== null) {
-            $serialized[static::PROCEDURE_END_CALLABLE] = $procedure->getEndCallable();
-            $this->blocksWithEnd[]                      = $index;
+            $serialized[BlockSerializer::PROCEDURE_END_CALLABLE] = $procedure->getEndCallable();
+            $this->blocksWithEnd[] = $index;
         }
         if (empty($procedure->getProperties()) === false) {
-            $serialized[static::PROPERTIES] = $procedure->getProperties();
+            $serialized[BlockSerializer::PROPERTIES] = $procedure->getProperties();
         }
 
         $this->serializedBlocks[$index] = $serialized;
@@ -246,7 +243,6 @@ final class BlockSerializer implements BlockSerializerInterface
 
     /**
      * @param IfExpressionInterface $ifExpression
-     *
      * @return int
      */
     private function serializeIfExpression(IfExpressionInterface $ifExpression): int
@@ -254,20 +250,20 @@ final class BlockSerializer implements BlockSerializerInterface
         $index = $this->allocateIndex();
 
         $serialized = [
-            static::TYPE                             => static::TYPE__IF_EXPRESSION,
-            static::IF_EXPRESSION_CONDITION_CALLABLE => $ifExpression->getConditionCallable(),
+            BlockSerializer::TYPE => BlockSerializer::TYPE__IF_EXPRESSION,
+            BlockSerializer::IF_EXPRESSION_CONDITION_CALLABLE => $ifExpression->getConditionCallable(),
         ];
 
         assert($ifExpression->getOnTrue() !== null || $ifExpression->getOnFalse() !== null);
 
         if ($ifExpression->getOnTrue() !== null) {
-            $serialized[static::IF_EXPRESSION_ON_TRUE_BLOCK] = $this->addBlock($ifExpression->getOnTrue());
+            $serialized[BlockSerializer::IF_EXPRESSION_ON_TRUE_BLOCK] = $this->addBlock($ifExpression->getOnTrue());
         }
         if ($ifExpression->getOnFalse() !== null) {
-            $serialized[static::IF_EXPRESSION_ON_FALSE_BLOCK] = $this->addBlock($ifExpression->getOnFalse());
+            $serialized[BlockSerializer::IF_EXPRESSION_ON_FALSE_BLOCK] = $this->addBlock($ifExpression->getOnFalse());
         }
         if (empty($ifExpression->getProperties()) === false) {
-            $serialized[static::PROPERTIES] = $ifExpression->getProperties();
+            $serialized[BlockSerializer::PROPERTIES] = $ifExpression->getProperties();
         }
 
         $this->serializedBlocks[$index] = $serialized;
@@ -277,7 +273,6 @@ final class BlockSerializer implements BlockSerializerInterface
 
     /**
      * @param AndExpressionInterface $andExpression
-     *
      * @return int
      */
     private function serializeAndExpression(AndExpressionInterface $andExpression): int
@@ -285,12 +280,12 @@ final class BlockSerializer implements BlockSerializerInterface
         $index = $this->allocateIndex();
 
         $serialized = [
-            static::TYPE                     => static::TYPE__AND_EXPRESSION,
-            static::AND_EXPRESSION_PRIMARY   => $this->addBlock($andExpression->getPrimary()),
-            static::AND_EXPRESSION_SECONDARY => $this->addBlock($andExpression->getSecondary()),
+            BlockSerializer::TYPE => BlockSerializer::TYPE__AND_EXPRESSION,
+            BlockSerializer::AND_EXPRESSION_PRIMARY => $this->addBlock($andExpression->getPrimary()),
+            BlockSerializer::AND_EXPRESSION_SECONDARY => $this->addBlock($andExpression->getSecondary()),
         ];
         if (empty($andExpression->getProperties()) === false) {
-            $serialized[static::PROPERTIES] = $andExpression->getProperties();
+            $serialized[BlockSerializer::PROPERTIES] = $andExpression->getProperties();
         }
 
         $this->serializedBlocks[$index] = $serialized;
@@ -300,7 +295,6 @@ final class BlockSerializer implements BlockSerializerInterface
 
     /**
      * @param OrExpressionInterface $orExpression
-     *
      * @return int
      */
     private function serializeOrExpression(OrExpressionInterface $orExpression): int
@@ -308,12 +302,12 @@ final class BlockSerializer implements BlockSerializerInterface
         $index = $this->allocateIndex();
 
         $serialized = [
-            static::TYPE                    => static::TYPE__OR_EXPRESSION,
-            static::OR_EXPRESSION_PRIMARY   => $this->addBlock($orExpression->getPrimary()),
-            static::OR_EXPRESSION_SECONDARY => $this->addBlock($orExpression->getSecondary()),
+            BlockSerializer::TYPE => BlockSerializer::TYPE__OR_EXPRESSION,
+            BlockSerializer::OR_EXPRESSION_PRIMARY => $this->addBlock($orExpression->getPrimary()),
+            BlockSerializer::OR_EXPRESSION_SECONDARY => $this->addBlock($orExpression->getSecondary()),
         ];
         if (empty($orExpression->getProperties()) === false) {
-            $serialized[static::PROPERTIES] = $orExpression->getProperties();
+            $serialized[BlockSerializer::PROPERTIES] = $orExpression->getProperties();
         }
 
         $this->serializedBlocks[$index] = $serialized;
@@ -326,8 +320,6 @@ final class BlockSerializer implements BlockSerializerInterface
      */
     private function allocateIndex(): int
     {
-        $index = $this->currentBlockIndex++;
-
-        return $index;
+        return $this->currentBlockIndex++;
     }
 }

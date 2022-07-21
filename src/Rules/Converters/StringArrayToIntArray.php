@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function is_iterable;
 use function is_numeric;
 use function is_string;
@@ -47,7 +48,7 @@ final class StringArrayToIntArray extends ExecuteRule
                 if (is_string($mightBeString) === true || is_numeric($mightBeString) === true) {
                     $result[$key] = (int)$mightBeString;
                 } else {
-                    $reply = static::createErrorReply(
+                    $reply = StringArrayToIntArray::createErrorReply(
                         $context,
                         $mightBeString,
                         ErrorCodes::IS_STRING,
@@ -58,9 +59,15 @@ final class StringArrayToIntArray extends ExecuteRule
                 }
             }
         } else {
-            $reply = static::createErrorReply($context, $value, ErrorCodes::IS_ARRAY, Messages::IS_ARRAY, []);
+            $reply = StringArrayToIntArray::createErrorReply(
+                $context,
+                $value,
+                ErrorCodes::IS_ARRAY,
+                Messages::IS_ARRAY,
+                []
+            );
         }
 
-        return $reply !== null ? $reply : static::createSuccessReply($result);
+        return $reply !== null ? $reply : StringArrayToIntArray::createSuccessReply($result);
     }
 }

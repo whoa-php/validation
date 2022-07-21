@@ -27,17 +27,15 @@ namespace Whoa\Validation\Contracts\Execution;
 interface BlockStateInterface
 {
     /**
-     * @param int   $key
+     * @param int $key
      * @param mixed $default
-     *
      * @return mixed
      */
     public function getState(int $key, $default = null);
 
     /**
-     * @param int   $key
+     * @param int $key
      * @param mixed $value
-     *
      * @return self
      */
     public function setState(int $key, $value): self;

@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function is_bool;
 use function is_string;
 use function strtolower;
@@ -42,16 +43,16 @@ final class StringToBool extends ExecuteRule
         if (is_string($value) === true) {
             $lcValue = strtolower($value);
             if ($lcValue === 'true' || $lcValue === '1' || $lcValue === 'on' || $lcValue === 'yes') {
-                $reply = static::createSuccessReply(true);
+                $reply = StringToBool::createSuccessReply(true);
             } elseif ($lcValue === 'false' || $lcValue === '0' || $lcValue === 'off' || $lcValue === 'no') {
-                $reply = static::createSuccessReply(false);
+                $reply = StringToBool::createSuccessReply(false);
             } else {
-                $reply = static::createErrorReply($context, $value, ErrorCodes::IS_BOOL, Messages::IS_BOOL, []);
+                $reply = StringToBool::createErrorReply($context, $value, ErrorCodes::IS_BOOL, Messages::IS_BOOL, []);
             }
         } elseif (is_bool($value) === true) {
-            $reply = static::createSuccessReply($value);
+            $reply = StringToBool::createSuccessReply($value);
         } else {
-            $reply = static::createErrorReply($context, $value, ErrorCodes::IS_BOOL, Messages::IS_BOOL, []);
+            $reply = StringToBool::createErrorReply($context, $value, ErrorCodes::IS_BOOL, Messages::IS_BOOL, []);
         }
 
         return $reply;

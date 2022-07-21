@@ -48,7 +48,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testDates(): void
@@ -173,7 +172,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testTimes(): void
@@ -299,7 +297,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testScalars(): void
@@ -420,7 +417,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testStrings(): void
@@ -510,7 +506,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testConverters(): void
@@ -624,7 +619,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testRequired(): void
@@ -663,7 +657,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testEnum(): void
@@ -712,7 +705,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testFilter(): void
@@ -762,7 +754,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testTypes(): void
@@ -844,7 +835,6 @@ class RulesTest extends TestCase
 
     /**
      * Test validator.
-     *
      * @throws Exception
      */
     public function testValue(): void
@@ -895,7 +885,6 @@ class RulesTest extends TestCase
 
     /**
      * Test basic rule methods.
-     *
      * @throws Exception
      */
     public function testBaseRule(): void
@@ -921,7 +910,6 @@ class RulesTest extends TestCase
 
     /**
      * Emulate we validate data against database.
-     *
      * @throws Exception
      */
     public function testEmulateValidationChecksDatabaseRecord(): void
@@ -943,7 +931,6 @@ class RulesTest extends TestCase
     /**
      * @param mixed $input
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function emulateDbRequest($input, ContextInterface $context): bool
@@ -951,17 +938,13 @@ class RulesTest extends TestCase
         assert($context);
 
         // emulate database request
-        $recordExists = is_int($input) === true && $input < 10;
-
-        return $recordExists;
+        return is_int($input) === true && $input < 10;
     }
 
     /**
      * @param array $input
      * @param array $rules
-     *
      * @return array
-     *
      * @throws Exception
      */
     private function validateArray(array $input, array $rules): array
@@ -983,7 +966,6 @@ class RulesTest extends TestCase
 
     /**
      * @param array $blocks
-     *
      * @return ContextStorageInterface
      */
     protected function createContextStorageFromBlocks(array $blocks): ContextStorageInterface
@@ -996,7 +978,6 @@ class RulesTest extends TestCase
     /**
      * @param string $name
      * @param ErrorInterface[] $errors
-     *
      * @return ErrorInterface
      */
     private function findErrorByParamName(string $name, array $errors): ErrorInterface

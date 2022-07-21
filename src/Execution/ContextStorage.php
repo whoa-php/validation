@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace Whoa\Validation\Execution;
 
 use Whoa\Validation\Contracts\Execution\BlockPropertiesInterface;
+use Whoa\Validation\Contracts\Execution\BlockSerializerInterface;
 use Whoa\Validation\Contracts\Execution\BlockStateInterface;
 use Whoa\Validation\Contracts\Execution\ContextStorageInterface;
 use Psr\Container\ContainerInterface;
@@ -34,30 +35,30 @@ class ContextStorage implements ContextStorageInterface, BlockStateInterface, Bl
     /**
      * @var array
      */
-    private $states = [];
+    private array $states = [];
 
     /**
      * @var int
      */
-    private $currentBlockId = 0;
+    private int $currentBlockId = 0;
 
     /**
      * @var
      */
-    private $blocks;
+    private array $blocks;
 
     /**
      * @var null|ContainerInterface
      */
-    private $container;
+    private ?ContainerInterface $container;
 
     /**
-     * @param array                   $blocks
+     * @param array $blocks
      * @param ContainerInterface|null $container
      */
     public function __construct(array $blocks, ContainerInterface $container = null)
     {
-        $this->blocks    = $blocks;
+        $this->blocks = $blocks;
         $this->container = $container;
     }
 
@@ -119,7 +120,7 @@ class ContextStorage implements ContextStorageInterface, BlockStateInterface, Bl
      */
     public function getProperty(int $key, $default = null)
     {
-        return $this->blocks[$this->getCurrentBlockId()][BlockSerializer::PROPERTIES][$key] ?? $default;
+        return $this->blocks[$this->getCurrentBlockId()][BlockSerializerInterface::PROPERTIES][$key] ?? $default;
     }
 
     /**

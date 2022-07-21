@@ -25,12 +25,13 @@ use DateTimeInterface;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 
 /**
  * @package Whoa\Validation
  */
-final class DateTimeBetween extends BaseTwoValueComparision
+final class DateTimeBetween extends BaseTwoValueComparison
 {
     /**
      * @param DateTimeInterface $lowerValue
@@ -55,11 +56,8 @@ final class DateTimeBetween extends BaseTwoValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert($value instanceof DateTimeInterface);
-        $result =
-            $value instanceof DateTimeInterface &&
-            static::readLowerValue($context) <= ($timestamp = $value->getTimestamp()) &&
-            $timestamp <= static::readUpperValue($context);
-
-        return $result;
+        return $value instanceof DateTimeInterface &&
+            DateTimeBetween::readLowerValue($context) <= ($timestamp = $value->getTimestamp()) &&
+            $timestamp <= DateTimeBetween::readUpperValue($context);
     }
 }

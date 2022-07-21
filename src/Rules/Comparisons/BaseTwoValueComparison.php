@@ -32,22 +32,22 @@ use Whoa\Validation\Rules\Generic\Success;
 /**
  * @package Whoa\Validation
  */
-abstract class BaseTwoValueComparision extends BaseRule implements ComparisionInterface
+abstract class BaseTwoValueComparison extends BaseRule implements ComparisionInterface
 {
     /**
      * Property key.
      */
-    const PROPERTY_LOWER_VALUE = self::PROPERTY_LAST + 1;
+    public const PROPERTY_LOWER_VALUE = self::PROPERTY_LAST + 1;
 
     /**
      * Property key.
      */
-    const PROPERTY_UPPER_VALUE = self::PROPERTY_LOWER_VALUE + 1;
+    public const PROPERTY_UPPER_VALUE = self::PROPERTY_LOWER_VALUE + 1;
 
     /**
      * Property key.
      */
-    const PROPERTY_TWO_VALUE_LAST = self::PROPERTY_UPPER_VALUE;
+    public const PROPERTY_TWO_VALUE_LAST = self::PROPERTY_UPPER_VALUE;
 
     /**
      * @var mixed
@@ -62,34 +62,34 @@ abstract class BaseTwoValueComparision extends BaseRule implements ComparisionIn
     /**
      * @var int
      */
-    private $errorCode;
+    private int $errorCode;
 
     /**
      * @var string
      */
-    private $messageTemplate;
+    private string $messageTemplate;
 
     /**
      * @var array
      */
-    private $messageParams;
+    private array $messageParams;
 
     /**
-     * @param mixed  $lowerValue
-     * @param mixed  $upperValue
-     * @param int    $errorCode
+     * @param mixed $lowerValue
+     * @param mixed $upperValue
+     * @param int $errorCode
      * @param string $messageTemplate
-     * @param array  $messageParams
+     * @param array $messageParams
      */
     public function __construct($lowerValue, $upperValue, int $errorCode, string $messageTemplate, array $messageParams)
     {
         assert($this->checkEachValueConvertibleToString($messageParams));
 
-        $this->lowerValue      = $lowerValue;
-        $this->upperValue      = $upperValue;
-        $this->errorCode       = $errorCode;
+        $this->lowerValue = $lowerValue;
+        $this->upperValue = $upperValue;
+        $this->errorCode = $errorCode;
         $this->messageTemplate = $messageTemplate;
-        $this->messageParams   = $messageParams;
+        $this->messageParams = $messageParams;
     }
 
     /**
@@ -162,9 +162,7 @@ abstract class BaseTwoValueComparision extends BaseRule implements ComparisionIn
      */
     protected static function readLowerValue(ContextInterface $context)
     {
-        $limit = $context->getProperties()->getProperty(static::PROPERTY_LOWER_VALUE);
-
-        return $limit;
+        return $context->getProperties()->getProperty(static::PROPERTY_LOWER_VALUE);
     }
 
     /**
@@ -174,8 +172,6 @@ abstract class BaseTwoValueComparision extends BaseRule implements ComparisionIn
      */
     protected static function readUpperValue(ContextInterface $context)
     {
-        $limit = $context->getProperties()->getProperty(static::PROPERTY_UPPER_VALUE);
-
-        return $limit;
+        return $context->getProperties()->getProperty(static::PROPERTY_UPPER_VALUE);
     }
 }

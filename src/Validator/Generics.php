@@ -33,6 +33,7 @@ use Whoa\Validation\Rules\Generic\OrOperator;
 use Whoa\Validation\Rules\Generic\Required;
 use Whoa\Validation\Rules\Generic\Success;
 use Whoa\Validation\Rules\Generic\Value;
+
 use function assert;
 use function is_resource;
 
@@ -44,7 +45,6 @@ trait Generics
     /**
      * @param RuleInterface $first
      * @param RuleInterface $second
-     *
      * @return RuleInterface
      */
     protected static function andX(RuleInterface $first, RuleInterface $second): RuleInterface
@@ -55,7 +55,6 @@ trait Generics
     /**
      * @param RuleInterface $primary
      * @param RuleInterface $secondary
-     *
      * @return RuleInterface
      */
     protected static function orX(RuleInterface $primary, RuleInterface $secondary): RuleInterface
@@ -64,11 +63,10 @@ trait Generics
     }
 
     /**
-     * @param callable      $condition
+     * @param callable $condition
      * @param RuleInterface $onTrue
      * @param RuleInterface $onFalse
-     * @param array         $settings
-     *
+     * @param array $settings
      * @return RuleInterface
      */
     protected static function ifX(
@@ -76,8 +74,7 @@ trait Generics
         RuleInterface $onTrue,
         RuleInterface $onFalse,
         array $settings = []
-    ): RuleInterface
-    {
+    ): RuleInterface {
         return new IfOperator($condition, $onTrue, $onFalse, $settings);
     }
 
@@ -90,24 +87,21 @@ trait Generics
     }
 
     /**
-     * @param int    $errorCode
+     * @param int $errorCode
      * @param string $messageTemplate
-     * @param array  $messageParams
-     *
+     * @param array $messageParams
      * @return RuleInterface
      */
     protected static function fail(
         int $errorCode = ErrorCodes::INVALID_VALUE,
         string $messageTemplate = Messages::INVALID_VALUE,
         array $messageParams = []
-    ): RuleInterface
-    {
+    ): RuleInterface {
         return new Fail($errorCode, $messageTemplate, $messageParams);
     }
 
     /**
      * @param mixed $value
-     *
      * @return RuleInterface
      */
     protected static function value($value): RuleInterface
@@ -119,9 +113,8 @@ trait Generics
     }
 
     /**
-     * @param array              $values
+     * @param array $values
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function enum(array $values, RuleInterface $next = null): RuleInterface
@@ -130,12 +123,11 @@ trait Generics
     }
 
     /**
-     * @param int                $filterId
-     * @param mixed              $options
-     * @param int                $errorCode
-     * @param string             $messageTemplate
+     * @param int $filterId
+     * @param mixed $options
+     * @param int $errorCode
+     * @param string $messageTemplate
      * @param RuleInterface|null $next
-     *
      * @return RuleInterface
      */
     protected static function filter(
@@ -144,16 +136,14 @@ trait Generics
         int $errorCode = ErrorCodes::INVALID_VALUE,
         string $messageTemplate = Messages::INVALID_VALUE,
         RuleInterface $next = null
-    ): RuleInterface
-    {
+    ): RuleInterface {
         $filterRule = new Filter($filterId, $options, $errorCode, $messageTemplate);
 
         return $next === null ? $filterRule : new AndOperator($filterRule, $next);
     }
 
     /**
-     * @param RuleInterface $rule
-     *
+     * @param RuleInterface|null $rule
      * @return RuleInterface
      */
     protected static function required(RuleInterface $rule = null): RuleInterface

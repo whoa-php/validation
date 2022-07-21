@@ -24,6 +24,7 @@ namespace Whoa\Validation\Rules\Comparisons;
 use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
+
 use function assert;
 use function is_scalar;
 use function is_string;
@@ -32,7 +33,7 @@ use function strlen;
 /**
  * @package Whoa\Validation
  */
-final class StringLengthBetween extends BaseTwoValueComparision
+final class StringLengthBetween extends BaseTwoValueComparison
 {
     /**
      * @param int $min
@@ -56,11 +57,8 @@ final class StringLengthBetween extends BaseTwoValueComparision
     public static function compare($value, ContextInterface $context): bool
     {
         assert(is_string($value) === true);
-        $result =
-            is_string($value) === true &&
-            static::readLowerValue($context) <= ($length = strlen($value)) &&
-            $length <= static::readUpperValue($context);
-
-        return $result;
+        return is_string($value) === true &&
+            StringLengthBetween::readLowerValue($context) <= ($length = strlen($value)) &&
+            $length <= StringLengthBetween::readUpperValue($context);
     }
 }

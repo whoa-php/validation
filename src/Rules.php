@@ -95,7 +95,6 @@ class Rules
     /**
      * @param mixed $value
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function isNull($value, ContextInterface $context): bool
@@ -108,7 +107,6 @@ class Rules
     /**
      * @param mixed $value
      * @param ContextInterface $context
-     *
      * @return bool
      */
     public static function isEmpty($value, ContextInterface $context): bool

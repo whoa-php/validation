@@ -25,6 +25,7 @@ use Whoa\Validation\Contracts\Errors\ErrorCodes;
 use Whoa\Validation\Contracts\Execution\ContextInterface;
 use Whoa\Validation\I18n\Messages;
 use Whoa\Validation\Rules\ExecuteRule;
+
 use function is_numeric;
 use function is_string;
 
@@ -41,11 +42,11 @@ final class StringToFloat extends ExecuteRule
         if (is_string($value) === true &&
             (is_numeric($value) === true || filter_var($value, FILTER_VALIDATE_FLOAT) === true)
         ) {
-            $reply = static::createSuccessReply((float)$value);
+            $reply = StringToFloat::createSuccessReply((float)$value);
         } elseif (is_float($value) === true) {
-            $reply = static::createSuccessReply($value);
+            $reply = StringToFloat::createSuccessReply($value);
         } else {
-            $reply = static::createErrorReply($context, $value, ErrorCodes::IS_FLOAT, Messages::IS_FLOAT, []);
+            $reply = StringToFloat::createErrorReply($context, $value, ErrorCodes::IS_FLOAT, Messages::IS_FLOAT, []);
         }
 
         return $reply;

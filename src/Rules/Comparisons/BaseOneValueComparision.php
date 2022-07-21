@@ -28,24 +28,23 @@ use Whoa\Validation\Rules\BaseRule;
 use Whoa\Validation\Rules\Generic\Fail;
 use Whoa\Validation\Rules\Generic\IfOperator;
 use Whoa\Validation\Rules\Generic\Success;
+
 use function assert;
 
 /**
  * @package Whoa\Validation
- *
- * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class BaseOneValueComparision extends BaseRule implements ComparisionInterface
 {
     /**
      * Property key.
      */
-    const PROPERTY_VALUE = self::PROPERTY_LAST + 1;
+    public const PROPERTY_VALUE = self::PROPERTY_LAST + 1;
 
     /**
      * Property key.
      */
-    const PROPERTY_ONE_VALUE_LAST = self::PROPERTY_VALUE;
+    public const PROPERTY_ONE_VALUE_LAST = self::PROPERTY_VALUE;
 
     /**
      * @var mixed
@@ -55,32 +54,32 @@ abstract class BaseOneValueComparision extends BaseRule implements ComparisionIn
     /**
      * @var int
      */
-    private $errorCode;
+    private int $errorCode;
 
     /**
      * @var string
      */
-    private $messageTemplate;
+    private string $messageTemplate;
 
     /**
      * @var array
      */
-    private $messageParams;
+    private array $messageParams;
 
     /**
-     * @param mixed  $value
-     * @param int    $errorCode
+     * @param mixed $value
+     * @param int $errorCode
      * @param string $messageTemplate
-     * @param array  $messageParams
+     * @param array $messageParams
      */
     public function __construct($value, int $errorCode, string $messageTemplate, array $messageParams)
     {
         assert($this->checkEachValueConvertibleToString($messageParams));
 
-        $this->value           = $value;
-        $this->errorCode       = $errorCode;
+        $this->value = $value;
+        $this->errorCode = $errorCode;
         $this->messageTemplate = $messageTemplate;
-        $this->messageParams   = $messageParams;
+        $this->messageParams = $messageParams;
     }
 
     /**
@@ -137,13 +136,10 @@ abstract class BaseOneValueComparision extends BaseRule implements ComparisionIn
 
     /**
      * @param ContextInterface $context
-     *
      * @return mixed
      */
     protected static function readValue(ContextInterface $context)
     {
-        $limit = $context->getProperties()->getProperty(static::PROPERTY_VALUE);
-
-        return $limit;
+        return $context->getProperties()->getProperty(static::PROPERTY_VALUE);
     }
 }
